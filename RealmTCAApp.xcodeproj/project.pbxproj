@@ -83,7 +83,6 @@
 		A1EC7BD92AE47ECE002DDD24 /* DashboardCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardCore.swift; sourceTree = "<group>"; };
 		A1EC7BDC2AE47FD4002DDD24 /* MoviesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesClient.swift; sourceTree = "<group>"; };
 		A1EC7BDF2AE4820C002DDD24 /* PopularMoviesDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularMoviesDto.swift; sourceTree = "<group>"; };
-		A1EC7BE12AE48372002DDD24 /* Todos.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Todos.md; sourceTree = "<group>"; };
 		A1EC7BE52AE65ABD002DDD24 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		A1EC7BE72AE65DFE002DDD24 /* MovieCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCore.swift; sourceTree = "<group>"; };
 		A1EC7BE92AE679FB002DDD24 /* MovieAdditionalObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAdditionalObject.swift; sourceTree = "<group>"; };
@@ -124,7 +123,6 @@
 		A1DC8E492AE2C9C20035EFF6 = {
 			isa = PBXGroup;
 			children = (
-				A1EC7BE12AE48372002DDD24 /* Todos.md */,
 				A1DC8E542AE2C9C20035EFF6 /* RealmTCAApp */,
 				A1DC8E662AE2C9C40035EFF6 /* RealmTCAAppTests */,
 				A1DC8E702AE2C9C40035EFF6 /* RealmTCAAppUITests */,
