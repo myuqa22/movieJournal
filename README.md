@@ -8,7 +8,7 @@ Verwendete REST API: [Movies REST API von TMDB](https://developer.themoviedb.org
 ![Übersicht Gesehene Filme](https://github.com/myuqa22/movieJournal/assets/52576264/45472eaf-9a05-4a6f-bcf0-d26d2e948847)
 ![Detailansicht](https://github.com/myuqa22/movieJournal/assets/52576264/712d9fd4-218f-451b-8402-14fa3340d749)
 
-
+<img src="https://github.com/myuqa22/movieJournal/assets/52576264/712d9fd4-218f-451b-8402-14fa3340d749" height="100">
 
 ## Verwendete Technologien
 - SwiftUI
@@ -24,6 +24,7 @@ Verwendete REST API: [Movies REST API von TMDB](https://developer.themoviedb.org
 - Übersicht von gesehenen Filme
 - Watchlist Übersicht
 ## Kommende Features
+- User friendly Error Handling
 - Unit Tests
 - Suchfunktion
 - Eigene Bewertung zu Filmen abspeichern
