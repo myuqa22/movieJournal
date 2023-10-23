@@ -37,12 +37,9 @@ struct Seen: Reducer {
         case loadAdditional
         case loadMovies([MovieAdditionalModel])
         case updateMovies([MovieModel])
-        case dismissButtonTapped
         case path(StackAction<Movie.State, Movie.Action>)
         case detailMovieButtonTapped(MovieModel)
     }
-    
-    @Dependency(\.dismiss) var dismiss
     
     var body: some Reducer<State, Action> {
         
@@ -67,10 +64,6 @@ struct Seen: Reducer {
             case let .updateMovies(movies):
                 state.movies = IdentifiedArray(uniqueElements: movies)
                 return .none
-            case .dismissButtonTapped:
-                return .run { _ in
-                    await self.dismiss()
-                }
             case .path:
                 return .none
             case .detailMovieButtonTapped:

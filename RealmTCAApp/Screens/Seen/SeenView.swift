@@ -26,15 +26,6 @@ struct SeenView: View {
                         })
                     }
                 }
-                .padding(.horizontal)
-                
-                Button(action: {
-                    viewStore.send(.dismissButtonTapped)
-                }, label: {
-                    Image(systemName: "x.circle")
-                        .tint(.black)
-                        .font(.largeTitle)
-                })
             }
             .padding(.horizontal)
             .navigationTitle("Gesehen")

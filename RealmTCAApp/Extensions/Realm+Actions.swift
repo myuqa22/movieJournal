@@ -15,7 +15,6 @@ extension Realm {
     
     func fetch<T: Object>(_ type: T.Type, predicate: NSPredicate? = nil) -> Effect<Results<T>> {
         let promise = Future<Results<T>, Never> { completion in
-            
             let objects = self.objects(type)
             if let predicate = predicate {
                 completion(.success(objects.filter(predicate)))
@@ -26,23 +25,6 @@ extension Realm {
         return Effect.publisher(promise.eraseToAnyPublisher)
     }
     
-    
-    func save<T: Object>(_ type: T.Type, value: [String: Any]) -> Effect<Signal> {
-        let promise = Future<Signal, Never> { completion in
-            do {
-                try self.write {
-                    self.create(type, value: value, update: .modified)
-                }
-                completion(.success(.success))
-            } catch {
-                //                completion(.failure(.failed))
-                // TODO: Error handling
-            }
-        }
-        
-        return Effect.publisher(promise.eraseToAnyPublisher)
-    }
-    
     func save<T: Object>(_ objects: [T]) throws {
         
         try self.write {
@@ -50,19 +32,11 @@ extension Realm {
         }
     }
     
-    func save<T: Object>(_ object: T) -> Effect<Signal> {
-        let promise = Future<Signal, Never> { completion in
-            do {
-                try self.write {
-                    self.create(T.self, value: object, update: .modified)
-                }
-                completion(.success(.signal))
-            } catch {
-                //                completion(.failure(AppError.unableToSave))
-                // TODO: Error handling
-            }
+    func save<T: Object>(_ object: T) throws {
+        
+        try self.write {
+            self.create(T.self, value: object, update: .modified)
         }
-        return Effect.publisher(promise.eraseToAnyPublisher)
     }
     
     func create<T: Object>(_ type: T.Type, object: T) -> Effect<T> {

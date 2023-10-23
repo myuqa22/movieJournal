@@ -48,13 +48,22 @@ struct Movie: Reducer {
             case .watchlistButtonTapped:
                 state.movieAdditional?.bookmarked.toggle()
                 if let movieAdditionalObject = state.movieAdditional?.movieAdditionalObject {
-                    _ = environment.realm.save(movieAdditionalObject)
+                    do {
+                        try environment.realm.save(movieAdditionalObject)
+                    } catch {
+                        print(error)
+                    }
+                   
                 }
                 return .none
             case .seenButtonTapped:
                 state.movieAdditional?.seen.toggle()
                 if let movieAdditionalObject = state.movieAdditional?.movieAdditionalObject {
-                    _ = environment.realm.save(movieAdditionalObject)
+                    do {
+                        try environment.realm.save(movieAdditionalObject)
+                    } catch {
+                        print(error)
+                    }
                 }
                 return .none
             case .load:
@@ -68,7 +77,6 @@ struct Movie: Reducer {
                         } else {
                             return .createAdditional
                         }
-                        
                     }
             case let .setupAdditional(model):
                 state.movieAdditional = model

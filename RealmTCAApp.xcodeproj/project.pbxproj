@@ -226,8 +226,8 @@
 			isa = PBXGroup;
 			children = (
 				A1EC7BED2AE6A540002DDD24 /* Watchlist */,
-				A1EC7BBB2AE2FDB3002DDD24 /* Movie */,
 				A1EC7BB42AE2D835002DDD24 /* Seen */,
+				A1EC7BBB2AE2FDB3002DDD24 /* Movie */,
 				A1DC8E882AE2CCCA0035EFF6 /* Dashboard */,
 			);
 			path = Screens;

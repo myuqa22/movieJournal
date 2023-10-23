@@ -135,7 +135,7 @@ struct FavoriteMoviesCaruselView: View {
                 }
             }
         }
-        .padding(.vertical)
+        .padding(.top)
         .background(.white)
     }
 }
@@ -188,7 +188,7 @@ struct TopRatedMovieCaruselView: View {
                 }
             }
         }
-        .padding(.vertical)
+        .padding(.top)
         .background(.white)
     }
 }

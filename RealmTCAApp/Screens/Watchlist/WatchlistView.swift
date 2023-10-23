@@ -18,7 +18,11 @@ struct WatchlistView: View {
             ScrollView {
                 VStack {
                     ForEach(viewStore.state.movies) { movie in
-                        MovieCellView(movie: movie)
+                        Button(action: {
+                            viewStore.send(.detailMovieButtonTapped(movie))
+                        }, label: {
+                            MovieCellView(movie: movie)
+                        })
                     }
                 }
             }

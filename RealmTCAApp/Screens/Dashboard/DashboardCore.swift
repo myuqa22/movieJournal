@@ -71,6 +71,9 @@ struct Dashboard: Reducer {
                 case let .element(id: _, action: .seen(.detailMovieButtonTapped(movie))):
                     state.path.append(.movie(.init(movie: movie)))
                     return .none
+                case let .element(id: _, action: .watchlist(.detailMovieButtonTapped(movie))):
+                    state.path.append(.movie(.init(movie: movie)))
+                    return .none
                 default:
                     return .none
                 }

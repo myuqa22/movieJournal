@@ -20,7 +20,6 @@ struct MovieView: View {
                     Text(viewStore.movie.title)
                         .font(.largeTitle)
                     UpperView(viewStore: viewStore)
-                    Text(viewStore.movie.release_date)
                     Text(viewStore.movie.overview)
                     Spacer()
                 }
