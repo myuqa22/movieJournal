@@ -36,20 +36,25 @@ struct Dashboard: Reducer {
     }
     
     enum Action {
+        
+        case showError(AppError)
+        
         case goToSeen
         case goToWatchlist
         case gotToMovie(MovieModel)
         case path(StackAction<Path.State, Path.Action>)
         
-        case loadPopularMovies
+        // MARK: Popular Movies
+        case fetchPopularMovies
         case popularMoviesResponse(TaskResult<PopularMoviesDto>)
-        case updatePopularMovie([MovieModel])
         case getPopularMoviesFromDatabase
+        case updatePopularMovie([MovieModel])
         
-        case loadTopRatedMovies
+        // MARK: Top Rated Movies
+        case fetchTopRatedMovies
         case topRatedMoviesResponse(TaskResult<TopRatedMoviesDto>)
-        case updateTopRatedMovies([MovieModel])
         case getTopRatedMoviesFromDatabase
+        case updateTopRatedMovies([MovieModel])
     }
     
     @Dependency(\.moviesClient) var movieClient
@@ -77,7 +82,8 @@ struct Dashboard: Reducer {
                 default:
                     return .none
                 }
-            case .loadPopularMovies:
+                // MARK: Popular movies
+            case .fetchPopularMovies:
                 state.isLoading = true
                 return .run { send in
                     await send(.popularMoviesResponse(.init {
@@ -86,30 +92,7 @@ struct Dashboard: Reducer {
                 }
             case let .popularMoviesResponse(result):
                 state.isLoading = false
-                switch result {
-                case let .success(dto):
-                    do {
-                        let objects = dto.results.map { $0.movieObject }.map { movieObject in
-                            if !movieObject.categories.contains(where: { $0.category == MovieSourceCategoryType.popular.rawValue }) {
-                                let category = MovieSourceCategory()
-                                category.category = MovieSourceCategoryType.popular.rawValue
-                                movieObject.categories.append(category)
-                            }
-                            return movieObject
-                        }
-                        
-                        try environment.realm.save(objects)
-                        return .run { send in
-                            await send(.getPopularMoviesFromDatabase)
-                        }
-                    } catch {
-                        return .none
-                    }
-                case let .failure(error):
-                    print(error)
-                    return .none
-                }
-                
+                return handlePopularMovieResponse(result: result)
             case .getPopularMoviesFromDatabase:
                 return environment.realm
                     .fetch(MovieObject.self)
@@ -122,7 +105,7 @@ struct Dashboard: Reducer {
             case let .updatePopularMovie(movies):
                 state.popularMovies = IdentifiedArrayOf(uniqueElements: movies)
                 return .none
-            case .loadTopRatedMovies:
+            case .fetchTopRatedMovies:
                 state.isLoading = true
                 return .run { send in
                     await send(.topRatedMoviesResponse(.init {
@@ -131,40 +114,15 @@ struct Dashboard: Reducer {
                 }
                 // MARK: Top Rated Movies
             case let .topRatedMoviesResponse(result):
-                state.isLoading = false
-                switch result {
-                case let .success(dto):
-                    do {
-                        let objects = dto.results.map { $0.movieObject }.map { movieObject in
-                            if !movieObject.categories.contains(where: { $0.category == MovieSourceCategoryType.topRated.rawValue }) {
-                                let category = MovieSourceCategory()
-                                category.category = MovieSourceCategoryType.topRated.rawValue
-                                movieObject.categories.append(category)
-                            }
-                            return movieObject
-                        }
-                        try environment.realm.save(objects)
-                        return .run { send in
-                            await send(.getTopRatedMoviesFromDatabase)
-                        }
-                    } catch {
-                        return .none
-                    }
-                case let .failure(error):
-                    print(error)
-                    return .none
-                }
+                return handleTopRatedMoviesResponse(result: result)
             case .getTopRatedMoviesFromDatabase:
-                return environment.realm
-                    .fetch(MovieObject.self)
-                    .map { results -> Dashboard.Action in
-                        let movies = Array(results.filter { return $0.categories.contains { category in
-                            category.category == MovieSourceCategoryType.topRated.rawValue
-                        }}.map { $0.movie })
-                        return .updateTopRatedMovies(movies)
-                    }
+                return handleGetTopRatedMoviesFromDatabase()
             case .updateTopRatedMovies(let movies):
                 state.topRatedMovies = IdentifiedArrayOf(uniqueElements: movies)
+                return .none
+                
+            case .showError(let appError):
+                print(appError)
                 return .none
             }
         }
@@ -172,4 +130,76 @@ struct Dashboard: Reducer {
             Path()
         }
     }
+    
+    
+    private func handlePopularMovieResponse(result: TaskResult<PopularMoviesDto>) -> Effect<Dashboard.Action> {
+        switch result {
+        case let .success(dto):
+            let objects = dto.results.map { $0.movieObject }.map { movieObject in
+                if !movieObject.categories.contains(
+                    where: { $0.category == MovieSourceCategoryType.popular.rawValue }) {
+                    let category = MovieSourceCategory()
+                    category.category = MovieSourceCategoryType.popular.rawValue
+                    movieObject.categories.append(category)
+                }
+                return movieObject
+            }
+            
+            return environment.realm.save(objects).map { signal -> Dashboard.Action in
+                switch signal {
+                case .success:
+                    return .getPopularMoviesFromDatabase
+                case .failure(let appError):
+                    return .showError(appError)
+                }
+            }
+            
+        case let .failure(error):
+            print(error)
+            return .none
+        }
+    }
+    
+    private func handleGetTopRatedMoviesFromDatabase() -> Effect<Dashboard.Action> {
+        
+        environment.realm
+            .fetch(MovieObject.self)
+            .map { results -> Dashboard.Action in
+                let movies = Array(results.filter { return $0.categories.contains { category in
+                    category.category == MovieSourceCategoryType.topRated.rawValue
+                }}.map { $0.movie })
+                return .updateTopRatedMovies(movies)
+            }
+    }
+    
+    private func handleTopRatedMoviesResponse(result: TaskResult<TopRatedMoviesDto>) -> Effect<Dashboard.Action> {
+        
+        switch result {
+        case let .success(dto):
+            let objects = dto.results.map { $0.movieObject }.map { movieObject in
+                // add category
+                if !movieObject.categories.contains(where: { $0.category == MovieSourceCategoryType.topRated.rawValue }) {
+                    let category = MovieSourceCategory()
+                    category.category = MovieSourceCategoryType.topRated.rawValue
+                    movieObject.categories.append(category)
+                }
+                return movieObject
+            }
+            return environment.realm
+                .save(objects)
+                .map { signal -> Dashboard.Action in
+                    switch signal {
+                    case .success:
+                        return .getTopRatedMoviesFromDatabase
+                    case .failure(let appError):
+                        return .showError(appError)
+                        
+                    }
+                }
+        case let .failure(error):
+            print(error)
+            return .none
+        }
+    }
+    
 }

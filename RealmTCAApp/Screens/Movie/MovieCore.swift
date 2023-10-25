@@ -34,7 +34,10 @@ struct Movie: Reducer {
     }
     
     enum Action: Equatable {
-        case load
+        
+        case showError(AppError)
+        
+        case loadOrCreateAdditional
         case watchlistButtonTapped
         case seenButtonTapped
         case setupAdditional(MovieAdditionalModel)
@@ -48,12 +51,16 @@ struct Movie: Reducer {
             case .watchlistButtonTapped:
                 state.movieAdditional?.bookmarked.toggle()
                 if let movieAdditionalObject = state.movieAdditional?.movieAdditionalObject {
-                    do {
-                        try environment.realm.save(movieAdditionalObject)
-                    } catch {
-                        print(error)
-                    }
-                   
+                    return environment.realm
+                        .save(movieAdditionalObject)
+                        .map { signal in
+                            switch signal {
+                            case .success:
+                                return .loadOrCreateAdditional
+                            case .failure(let appError):
+                                return .showError(appError)
+                            }
+                        }
                 }
                 return .none
             case .seenButtonTapped:
@@ -66,7 +73,7 @@ struct Movie: Reducer {
                     }
                 }
                 return .none
-            case .load:
+            case .loadOrCreateAdditional:
                 return environment.realm
                     .fetch(
                         MovieAdditionalObject.self,
@@ -78,9 +85,6 @@ struct Movie: Reducer {
                             return .createAdditional
                         }
                     }
-            case let .setupAdditional(model):
-                state.movieAdditional = model
-                return .none
             case .createAdditional:
                 let additional = MovieAdditionalObject()
                 additional.id = state.movie.id
@@ -88,11 +92,25 @@ struct Movie: Reducer {
                 additional.favorite = false
                 additional.seen = false
                 additional.customRating = 0
-                return environment.realm.create(MovieAdditionalObject.self, object: additional)
-                    .map { object -> Movie.Action in
-                        return .setupAdditional(object.movieAdditional)
+                return environment.realm
+                    .create(MovieAdditionalObject.self, object: additional)
+                    .map { signal -> Movie.Action in
+                        switch signal {
+                        case .success:
+                            return .setupAdditional(additional.movieAdditional)
+                        case .failure(let appError):
+                            return .showError(appError)
+                        }
                     }
+            case let .setupAdditional(model):
+                state.movieAdditional = model
+                return .none
+                
+            case let .showError(appError):
+                print(appError)
+                return .none
             }
         }
     }
+    
 }

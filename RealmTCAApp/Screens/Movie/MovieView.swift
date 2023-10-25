@@ -26,31 +26,11 @@ struct MovieView: View {
                 .padding(.horizontal)
                 .toolbarTitleDisplayMode(.inline)
                 .onAppear {
-                    viewStore.send(.load)
+                    viewStore.send(.loadOrCreateAdditional)
                 }
             }
         }
     }
-}
-
-#Preview {
-    MovieView(
-        store: Store(
-            initialState: Movie.State(movie: MovieModel(id: UUID(),
-                                                        title: "Movie",
-                                                        image: "",
-                                                        rating: 5, 
-                                                        overview: "abc",
-                                                        release_date: "Datum"),
-                                      movieAdditional: MovieAdditionalModel(id: UUID(),
-                                                                            bookmarked: false,
-                                                                            seen: false,
-                                                                            customDescription: "",
-                                                                            customRating: 5)),
-            reducer: {
-                Movie()
-            }
-        ))
 }
 
 struct UpperView: View {
@@ -134,4 +114,24 @@ struct UpperView: View {
             Spacer()
         }
     }
+}
+
+#Preview {
+    MovieView(
+        store: Store(
+            initialState: Movie.State(movie: MovieModel(id: UUID(),
+                                                        title: "Movie",
+                                                        image: "",
+                                                        rating: 5,
+                                                        overview: "abc",
+                                                        release_date: "Datum"),
+                                      movieAdditional: MovieAdditionalModel(id: UUID(),
+                                                                            bookmarked: false,
+                                                                            seen: false,
+                                                                            customDescription: "",
+                                                                            customRating: 5)),
+            reducer: {
+                Movie()
+            }
+        ))
 }

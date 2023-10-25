@@ -8,6 +8,8 @@
 import Foundation
 
 enum AppError: Error {
-    
-    case failed
+
+    case decodedError
+    case writeDatabaseError
 }
+

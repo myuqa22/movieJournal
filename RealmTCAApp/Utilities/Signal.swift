@@ -7,17 +7,13 @@
 
 import Foundation
 
-//enum Signal: Equatable {
-//    case success
-//    case failure(AppError)
-//}
-//
-//extension Signal {
-//    static func ==(lhs: Self, rhs: Self) -> Bool {
-//        return true
-//    }
-//    
-//    static var signal: Self {
-//        Self.success
-//    }
-//}
+enum Signal: Equatable {
+    case success
+    case failure(AppError)
+}
+
+extension Signal {
+    static func ==(lhs: Self, rhs: Self) -> Bool {
+        return true
+    }
+}

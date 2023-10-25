@@ -80,13 +80,6 @@ struct DashboardView: View {
     }
 }
 
-#Preview {
-    DashboardView(
-        store: Store(initialState: Dashboard.State(),
-                     reducer: { Dashboard() })
-    )
-}
-
 struct FavoriteMoviesCaruselView: View {
     
     let viewStore: ViewStore<Dashboard.State, Dashboard.Action>
@@ -98,7 +91,7 @@ struct FavoriteMoviesCaruselView: View {
                     .font(.title3)
                 Spacer()
                 Button(action: {
-                    viewStore.send(.loadPopularMovies)
+                    viewStore.send(.fetchPopularMovies)
                 }, label: {
                     Image(systemName: "arrow.clockwise")
                         .resizable()
@@ -151,7 +144,7 @@ struct TopRatedMovieCaruselView: View {
                     .font(.title3)
                 Spacer()
                 Button(action: {
-                    viewStore.send(.loadTopRatedMovies)
+                    viewStore.send(.fetchTopRatedMovies)
                 }, label: {
                     Image(systemName: "arrow.clockwise")
                         .resizable()
@@ -191,4 +184,11 @@ struct TopRatedMovieCaruselView: View {
         .padding(.top)
         .background(.white)
     }
+}
+
+#Preview {
+    DashboardView(
+        store: Store(initialState: Dashboard.State(),
+                     reducer: { Dashboard() })
+    )
 }
