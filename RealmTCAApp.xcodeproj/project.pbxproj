@@ -58,6 +58,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A112D83F2AE9467B0081BA01 /* MovieDatabaseAPKey.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MovieDatabaseAPKey.xcconfig; sourceTree = "<group>"; };
+		A112D8402AE947400081BA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A14420152AE6BFFF007D79DD /* MovieCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellView.swift; sourceTree = "<group>"; };
 		A14420172AE6C39A007D79DD /* TopRatedMoviesDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedMoviesDto.swift; sourceTree = "<group>"; };
 		A14420192AE6E35C007D79DD /* MovieSourceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSourceCategory.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 		A1DC8E542AE2C9C20035EFF6 /* RealmTCAApp */ = {
 			isa = PBXGroup;
 			children = (
+				A112D8402AE947400081BA01 /* Info.plist */,
 				A1EC7BDB2AE47F93002DDD24 /* Clients */,
 				A1EC7BD02AE3FF5E002DDD24 /* Utilities */,
 				A1EC7BD32AE4197C002DDD24 /* Objects */,
@@ -153,6 +156,7 @@
 				A1DC8E592AE2C9C40035EFF6 /* Assets.xcassets */,
 				A1DC8E5B2AE2C9C40035EFF6 /* RealmTCAApp.entitlements */,
 				A1DC8E5C2AE2C9C40035EFF6 /* Preview Content */,
+				A112D83F2AE9467B0081BA01 /* MovieDatabaseAPKey.xcconfig */,
 			);
 			path = RealmTCAApp;
 			sourceTree = "<group>";
@@ -486,6 +490,7 @@
 /* Begin XCBuildConfiguration section */
 		A1DC8E752AE2C9C40035EFF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A112D83F2AE9467B0081BA01 /* MovieDatabaseAPKey.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -548,6 +553,7 @@
 		};
 		A1DC8E762AE2C9C40035EFF6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A112D83F2AE9467B0081BA01 /* MovieDatabaseAPKey.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -613,6 +619,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RealmTCAApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Movie Journal";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -654,6 +661,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RealmTCAApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Movie Journal";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

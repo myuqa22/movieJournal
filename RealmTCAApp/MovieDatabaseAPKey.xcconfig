@@ -1,0 +1,11 @@
+//
+//  MovieDatabaseAPKey.xcconfig
+//  RealmTCAApp
+//
+//  Created by Privat on 25.10.23.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+BEARER_TOKEN = eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjBiMjlmZDZjYjgyZGZlNzdhYzMxMmFiOWQ3MzRmMyIsInN1YiI6IjY1MzQ0ODgwYzE0ZmVlMDBjNmVkYjgyMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FYNFnXx1jdXRYd_ULNRwc0Epur85I_shNzl7fC6Rh-s

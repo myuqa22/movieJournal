@@ -17,10 +17,10 @@ extension Realm {
         let promise = Future<Results<T>, Never> { completion in
             let objects = self.objects(type)
             if let predicate = predicate {
-                completion(.success(objects.filter(predicate)))
+                 completion(.success(objects.filter(predicate)))
                 return
             }
-            completion(.success(objects))
+             completion(.success(objects))
         }
         return Effect.publisher(promise.eraseToAnyPublisher)
     }
@@ -42,12 +42,11 @@ extension Realm {
     func create<T: Object>(_ type: T.Type, object: T) -> Effect<T> {
         let promise = Future<T, Never> { completion in
             do {
-                try self.write({
+                try self.write {
                     self.add(object)
-                })
+                }
                 completion(.success(object))
             } catch {
-                //                completion(.failure(.))
                 // TODO: Error handling
             }
         }
