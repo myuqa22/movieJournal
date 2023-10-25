@@ -66,11 +66,16 @@ struct Movie: Reducer {
             case .seenButtonTapped:
                 state.movieAdditional?.seen.toggle()
                 if let movieAdditionalObject = state.movieAdditional?.movieAdditionalObject {
-                    do {
-                        try environment.realm.save(movieAdditionalObject)
-                    } catch {
-                        print(error)
-                    }
+                    return environment.realm
+                        .save(movieAdditionalObject)
+                        .map { signal in
+                            switch signal {
+                            case .success:
+                                return .loadOrCreateAdditional
+                            case .failure(let appError):
+                                return .showError(appError)
+                            }
+                        }
                 }
                 return .none
             case .loadOrCreateAdditional:
