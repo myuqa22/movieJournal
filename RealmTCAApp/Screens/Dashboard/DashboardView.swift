@@ -86,24 +86,33 @@ struct DashboardView: View {
                     viewStore.send(.goToSeen)
                 }, label: {
                     Text("Gesehen")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                         .padding()
                         .tint(.white)
                         .background(.purple)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                        
                 })
                 .frame(maxWidth: .infinity)
+                
                 Button(action: {
                     viewStore.send(.goToWatchlist)
                 }, label: {
                     Text("Watchlist")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                         .padding()
                         .tint(.white)
                         .background(.purple)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                    
+                        
                 })
                 .frame(maxWidth: .infinity)
-            }
+                
+            } .frame(maxWidth: .infinity)
         }
     }
 }
