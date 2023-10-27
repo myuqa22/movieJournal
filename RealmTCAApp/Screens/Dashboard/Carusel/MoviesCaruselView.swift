@@ -11,15 +11,15 @@ import ComposableArchitecture
 
 struct MoviesCaruselView: View {
     
-    let store: StoreOf<MovieCarusel>
+    let store: StoreOf<MoviesCarusel>
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 HStack {
                     Text(viewStore.state.category.title)
-                        .font(.title3)
-                        .fontWeight(.bold)
+                        .font(.headline)
+                        .fontWeight(.semibold)
                         .tint(.white)
                     Spacer()
                 }
@@ -37,12 +37,13 @@ struct MoviesCaruselView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                 }
-                                .frame(width: 80)
-//                                Text(movie.title)
-//                                    .font(.caption)
-//                                    .frame(width: 100)
-//                                    .fontWeight(.bold)
-//                                Spacer()
+                                .frame(width: 120)
+                                Text(movie.title)
+                                    .font(.caption)
+                                    .frame(width: 120)
+                                    .fontWeight(.bold)
+                                    .lineLimit(2)
+                                Spacer()
                             }
                             .onTapGesture {
                                 viewStore.send(.gotToMovie(movie))
@@ -59,7 +60,7 @@ struct MoviesCaruselView: View {
 }
 
 #Preview {
-    MoviesCaruselView(store: Store(initialState: MovieCarusel.State.init(category: .popular), reducer: {
-        MovieCarusel()
+    MoviesCaruselView(store: Store(initialState: MoviesCarusel.State.init(category: .popular), reducer: {
+        MoviesCarusel()
     }))
 }

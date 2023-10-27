@@ -30,12 +30,13 @@ struct Dashboard: Reducer {
     
     struct State: Equatable, Hashable, Codable {
         
-        var popularMoviesCarusel = MovieCarusel.State(category: .popular)
-        var topRatedMoviesCarusel = MovieCarusel.State(category: .topRated)
         var path = StackState<Path.State>()
         var popularMovies: IdentifiedArrayOf<MovieModel> = []
         var topRatedMovies: IdentifiedArrayOf<MovieModel> = []
         var isLoading = false
+        var popularMoviesCarusel = MoviesCarusel.State(category: .popular)
+        var topRatedMoviesCarusel = MoviesCarusel.State(category: .topRated)
+        var nowPlayingMoviesCarusel = MoviesCarusel.State(category: .nowPlaying)
     }
     
     enum Action {
@@ -47,8 +48,9 @@ struct Dashboard: Reducer {
         case gotToMovie(MovieModel)
         case path(StackAction<Path.State, Path.Action>)
         
-        case popularMoviesCarusel(MovieCarusel.Action)
-        case topRatedMoviesCarusel(MovieCarusel.Action)
+        case popularMoviesCarusel(MoviesCarusel.Action)
+        case topRatedMoviesCarusel(MoviesCarusel.Action)
+        case nowPlayingMoviesCarusel(MoviesCarusel.Action)
     }
     
     @Dependency(\.moviesClient) var movieClient
@@ -56,11 +58,15 @@ struct Dashboard: Reducer {
     var body: some Reducer<State, Action> {
         
         Scope(state: \.popularMoviesCarusel, action: /Action.popularMoviesCarusel) {
-            MovieCarusel()
+            MoviesCarusel()
         }
         
         Scope(state: \.topRatedMoviesCarusel, action: /Action.topRatedMoviesCarusel) {
-            MovieCarusel()
+            MoviesCarusel()
+        }
+        
+        Scope(state: \.nowPlayingMoviesCarusel, action: /Action.nowPlayingMoviesCarusel) {
+            MoviesCarusel()
         }
         
         Reduce { state, action in
@@ -74,6 +80,14 @@ struct Dashboard: Reducer {
                     return .none
                 }
             case let .topRatedMoviesCarusel(movieCaruselAction):
+                switch movieCaruselAction {
+                case let .gotToMovie(movieModel):
+                    state.path.append(.movie(.init(movie: movieModel)))
+                    return .none
+                default:
+                    return .none
+                }
+            case let .nowPlayingMoviesCarusel(movieCaruselAction):
                 switch movieCaruselAction {
                 case let .gotToMovie(movieModel):
                     state.path.append(.movie(.init(movie: movieModel)))

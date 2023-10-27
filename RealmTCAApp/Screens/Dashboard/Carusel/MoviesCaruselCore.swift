@@ -10,7 +10,7 @@ import Foundation
 import ComposableArchitecture
 import RealmSwift
 
-struct MovieCaruselEnvironment {
+struct MoviesCaruselEnvironment {
     
     let realm: Realm
     
@@ -23,9 +23,9 @@ struct MovieCaruselEnvironment {
     }
 }
 
-struct MovieCarusel: Reducer {
+struct MoviesCarusel: Reducer {
     
-    let environment = MovieCaruselEnvironment()
+    let environment = MoviesCaruselEnvironment()
     
     struct State: Equatable, Codable, Hashable {
         let category: MovieSourceCategoryType
@@ -61,6 +61,10 @@ struct MovieCarusel: Reducer {
                         await send(.moviesResponse(.init {
                             try await self.movieClient.topRatedMovies()
                         }))
+                    case .nowPlaying:
+                        await send(.moviesResponse(.init {
+                            try await self.movieClient.nowPlayingMovies()
+                        }))
                     }
                 }
             case let .moviesResponse(result):
@@ -77,7 +81,6 @@ struct MovieCarusel: Reducer {
                             }
                             return $0
                         }
-                    
                     return environment.realm.save(objects).map { signal in
                         switch signal {
                         case .success:

@@ -23,15 +23,22 @@ struct DashboardView: View {
                         VStack(spacing: .zero) {
                             UpperView(viewStore: viewStore)
                             
-                            MoviesCaruselView(store: self.store.scope(state: \.popularMoviesCarusel,
-                                                                      action: { childAction in
-                                    .popularMoviesCarusel(childAction)
-                            }))
-                            
-                            MoviesCaruselView(store: self.store.scope(state: \.topRatedMoviesCarusel,
-                                                                      action: { childAction in
-                                    .topRatedMoviesCarusel(childAction)
-                            }))
+                            Group {
+                                MoviesCaruselView(store: self.store.scope(state: \.popularMoviesCarusel,
+                                                                          action: { childAction in
+                                        .popularMoviesCarusel(childAction)
+                                }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.topRatedMoviesCarusel,
+                                                                          action: { childAction in
+                                        .topRatedMoviesCarusel(childAction)
+                                }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.nowPlayingMoviesCarusel,
+                                                                          action: { childAction in
+                                        .nowPlayingMoviesCarusel(childAction)
+                                }))
+                            }
                             
                             Spacer()
                         }
@@ -93,7 +100,7 @@ struct DashboardView: View {
                         .tint(.white)
                         .background(.purple)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                        
+                    
                 })
                 .frame(maxWidth: .infinity)
             }

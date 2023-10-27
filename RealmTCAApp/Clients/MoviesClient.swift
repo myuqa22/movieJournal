@@ -12,6 +12,7 @@ import ComposableArchitecture
 struct MoviesClient {
     var popularMovies: @Sendable () async throws -> MoviesDto
     var topRatedMovies:  @Sendable () async throws -> MoviesDto
+    var nowPlayingMovies: @Sendable () async throws -> MoviesDto
 }
 
 extension DependencyValues {
@@ -53,6 +54,20 @@ extension MoviesClient: DependencyKey {
             
             return decoded
             
+        }, nowPlayingMovies: {
+            try await Task.sleep(for: .seconds(1))
+            
+            var url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=de-GER")!
+        
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
+            
+            let (data, _) = try await URLSession.shared
+                .data(for: request)
+            let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
+            
+            return decoded
+            
         }
     )
 
@@ -60,6 +75,7 @@ extension MoviesClient: DependencyKey {
     /// to prove do not need the dependency.
     static let testValue = Self(
         popularMovies: unimplemented("\(Self.self).popularMovies"),
-        topRatedMovies: unimplemented("\(Self.self).topRatedMovies")
+        topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
+        nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies")
     )
 }
