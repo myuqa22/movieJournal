@@ -94,7 +94,7 @@ struct Movie: Reducer {
                 let additional = MovieAdditionalObject()
                 additional.id = state.movie.id
                 additional.customDescription = String()
-                additional.favorite = false
+                additional.bookmarked = false
                 additional.seen = false
                 additional.customRating = 0
                 return environment.realm

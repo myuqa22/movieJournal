@@ -13,7 +13,6 @@
 		A1DC8E562AE2C9C20035EFF6 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DC8E552AE2C9C20035EFF6 /* AppView.swift */; };
 		A1DC8E5A2AE2C9C40035EFF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1DC8E592AE2C9C40035EFF6 /* Assets.xcassets */; };
 		A1DC8E5E2AE2C9C40035EFF6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1DC8E5D2AE2C9C40035EFF6 /* Preview Assets.xcassets */; };
-		A1DC8E682AE2C9C40035EFF6 /* RealmTCAAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DC8E672AE2C9C40035EFF6 /* RealmTCAAppTests.swift */; };
 		A1DC8E722AE2C9C40035EFF6 /* RealmTCAAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DC8E712AE2C9C40035EFF6 /* RealmTCAAppUITests.swift */; };
 		A1DC8E742AE2C9C40035EFF6 /* RealmTCAAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DC8E732AE2C9C40035EFF6 /* RealmTCAAppUITestsLaunchTests.swift */; };
 		A1DC8E822AE2CA130035EFF6 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = A1DC8E812AE2CA130035EFF6 /* ComposableArchitecture */; };
@@ -38,6 +37,8 @@
 		A1EC7BEC2AE67A9C002DDD24 /* MovieAdditionalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EC7BEB2AE67A9C002DDD24 /* MovieAdditionalModel.swift */; };
 		A1EC7BEF2AE6A594002DDD24 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EC7BEE2AE6A594002DDD24 /* WatchlistView.swift */; };
 		A1EC7BF12AE6A5A0002DDD24 /* WatchlistCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EC7BF02AE6A5A0002DDD24 /* WatchlistCore.swift */; };
+		A1F655762AEBC41800935854 /* SeenCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F655752AEBC41800935854 /* SeenCoreTests.swift */; };
+		A1F655782AEBD3CE00935854 /* WatchlistCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F655772AEBD3CE00935854 /* WatchlistCoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +70,6 @@
 		A1DC8E5B2AE2C9C40035EFF6 /* RealmTCAApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RealmTCAApp.entitlements; sourceTree = "<group>"; };
 		A1DC8E5D2AE2C9C40035EFF6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A1DC8E632AE2C9C40035EFF6 /* RealmTCAAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmTCAAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1DC8E672AE2C9C40035EFF6 /* RealmTCAAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTCAAppTests.swift; sourceTree = "<group>"; };
 		A1DC8E6D2AE2C9C40035EFF6 /* RealmTCAAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmTCAAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DC8E712AE2C9C40035EFF6 /* RealmTCAAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTCAAppUITests.swift; sourceTree = "<group>"; };
 		A1DC8E732AE2C9C40035EFF6 /* RealmTCAAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTCAAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -91,6 +91,9 @@
 		A1EC7BEB2AE67A9C002DDD24 /* MovieAdditionalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAdditionalModel.swift; sourceTree = "<group>"; };
 		A1EC7BEE2AE6A594002DDD24 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		A1EC7BF02AE6A5A0002DDD24 /* WatchlistCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistCore.swift; sourceTree = "<group>"; };
+		A1F655742AEBA98B00935854 /* RealmTCAApp.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RealmTCAApp.xctestplan; sourceTree = "<group>"; };
+		A1F655752AEBC41800935854 /* SeenCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeenCoreTests.swift; sourceTree = "<group>"; };
+		A1F655772AEBD3CE00935854 /* WatchlistCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistCoreTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +128,7 @@
 		A1DC8E492AE2C9C20035EFF6 = {
 			isa = PBXGroup;
 			children = (
+				A1F655742AEBA98B00935854 /* RealmTCAApp.xctestplan */,
 				A1DC8E542AE2C9C20035EFF6 /* RealmTCAApp */,
 				A1DC8E662AE2C9C40035EFF6 /* RealmTCAAppTests */,
 				A1DC8E702AE2C9C40035EFF6 /* RealmTCAAppUITests */,
@@ -172,7 +176,8 @@
 		A1DC8E662AE2C9C40035EFF6 /* RealmTCAAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				A1DC8E672AE2C9C40035EFF6 /* RealmTCAAppTests.swift */,
+				A1F655752AEBC41800935854 /* SeenCoreTests.swift */,
+				A1F655772AEBD3CE00935854 /* WatchlistCoreTests.swift */,
 			);
 			path = RealmTCAAppTests;
 			sourceTree = "<group>";
@@ -459,7 +464,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1DC8E682AE2C9C40035EFF6 /* RealmTCAAppTests.swift in Sources */,
+				A1F655782AEBD3CE00935854 /* WatchlistCoreTests.swift in Sources */,
+				A1F655762AEBC41800935854 /* SeenCoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@ struct MovieAdditionalModel: Equatable, Identifiable, Hashable, Codable {
     var movieAdditionalObject: MovieAdditionalObject {
         let movieAdditional = MovieAdditionalObject()
         movieAdditional.id = id
-        movieAdditional.favorite = bookmarked
+        movieAdditional.bookmarked = bookmarked
         movieAdditional.seen = seen
         movieAdditional.customDescription = customDescription
         movieAdditional.customRating = customRating

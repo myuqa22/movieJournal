@@ -10,7 +10,7 @@ import Foundation
 
 class MovieAdditionalObject: Object {
     @Persisted(primaryKey: true) var id: UUID
-    @Persisted var favorite: Bool
+    @Persisted var bookmarked: Bool
     @Persisted var seen: Bool
     @Persisted var customDescription: String
     @Persisted var customRating: Double
@@ -20,7 +20,7 @@ extension MovieAdditionalObject {
     
     var movieAdditional: MovieAdditionalModel {
         .init(id: id,
-              bookmarked: favorite,
+              bookmarked: bookmarked,
               seen: seen,
               customDescription: customDescription,
               customRating: customRating)

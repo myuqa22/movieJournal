@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "467C90DE-EDC9-4B25-BAE4-7531B7D24E79",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:RealmTCAApp.xcodeproj",
+      "identifier" : "A1DC8E512AE2C9C20035EFF6",
+      "name" : "RealmTCAApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:RealmTCAApp.xcodeproj",
+        "identifier" : "A1DC8E622AE2C9C40035EFF6",
+        "name" : "RealmTCAAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

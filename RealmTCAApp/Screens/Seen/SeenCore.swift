@@ -35,7 +35,8 @@ struct Seen: Reducer {
     
     enum Action: Equatable, Sendable {
         case loadAdditional
-        case loadMovies([MovieAdditionalModel])
+        case updateMovieAdditional([MovieAdditionalModel])
+        case loadMovies
         case updateMovies([MovieModel])
         case path(StackAction<Movie.State, Movie.Action>)
         case detailMovieButtonTapped(MovieModel)
@@ -49,10 +50,14 @@ struct Seen: Reducer {
                 return environment.realm.fetch(MovieAdditionalObject.self)
                     .map { results -> Seen.Action in
                         let seenMoviesAdditional = Array(results.filter { $0.seen }.map { $0.movieAdditional })
-                        return .loadMovies(seenMoviesAdditional)
+                        return .updateMovieAdditional(seenMoviesAdditional)
                     }
-            case let .loadMovies(seenMoviesAdditional):
-                state.additional = IdentifiedArray(uniqueElements: seenMoviesAdditional)
+            case let .updateMovieAdditional(additional):
+                state.additional = IdentifiedArray(uniqueElements: additional)
+                return .run { send in
+                    await send(.loadMovies)
+                }
+            case .loadMovies:
                 let seenIds = Set(state.additional.map { $0.id })
                 return environment.realm.fetch(MovieObject.self)
                     .map { results -> Seen.Action in
