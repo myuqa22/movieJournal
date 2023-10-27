@@ -1,13 +1,13 @@
 //
-//  PopularMoviesDto.swift
+//  TopRatedMoviesDto.swift
 //  RealmTCAApp
 //
-//  Created by Privat on 22.10.23.
+//  Created by Privat on 23.10.23.
 //
 
 import Foundation
 
-struct PopularMoviesDto: Codable {    
+struct MoviesDto: Codable {
     
     let page: Int
     let results: [MovieDto]

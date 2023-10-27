@@ -10,8 +10,8 @@ import Foundation
 import ComposableArchitecture
 
 struct MoviesClient {
-    var popularMovies: @Sendable () async throws -> PopularMoviesDto
-    var topRatedMovies:  @Sendable () async throws -> TopRatedMoviesDto
+    var popularMovies: @Sendable () async throws -> MoviesDto
+    var topRatedMovies:  @Sendable () async throws -> MoviesDto
 }
 
 extension DependencyValues {
@@ -36,7 +36,7 @@ extension MoviesClient: DependencyKey {
             
             let (data, _) = try await URLSession.shared
                 .data(for: request)
-            let decoded = try JSONDecoder().decode(PopularMoviesDto.self, from: data)
+            let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
             
             return decoded
         }, topRatedMovies: {
@@ -49,7 +49,7 @@ extension MoviesClient: DependencyKey {
             
             let (data, _) = try await URLSession.shared
                 .data(for: request)
-            let decoded = try JSONDecoder().decode(TopRatedMoviesDto.self, from: data)
+            let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
             
             return decoded
             

@@ -20,29 +20,19 @@ struct DashboardView: View {
                 ZStack {
                     Color.gray.opacity(0.1).ignoresSafeArea()
                     ScrollView {
-                        VStack(spacing: 20) {
-                            HStack {
-                                Button(action: {
-                                    viewStore.send(.goToSeen)
-                                }, label: {
-                                    Text("Gesehen")
-                                        .padding()
-                                        .tint(.white)
-                                        .background(.purple)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                                })
-                                Button(action: {
-                                    viewStore.send(.goToWatchlist)
-                                }, label: {
-                                    Text("Watchlist")
-                                        .padding()
-                                        .tint(.white)
-                                        .background(.purple)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                                })
-                            }
-                            FavoriteMoviesCaruselView(viewStore: viewStore)
-                            TopRatedMovieCaruselView(viewStore: viewStore)
+                        VStack(spacing: .zero) {
+                            UpperView(viewStore: viewStore)
+                            
+                            MoviesCaruselView(store: self.store.scope(state: \.popularMoviesCarusel,
+                                                                      action: { childAction in
+                                    .popularMoviesCarusel(childAction)
+                            }))
+                            
+                            MoviesCaruselView(store: self.store.scope(state: \.topRatedMoviesCarusel,
+                                                                      action: { childAction in
+                                    .topRatedMoviesCarusel(childAction)
+                            }))
+                            
                             Spacer()
                         }
                     }
@@ -78,111 +68,36 @@ struct DashboardView: View {
             }
         }
     }
-}
-
-struct FavoriteMoviesCaruselView: View {
     
-    let viewStore: ViewStore<Dashboard.State, Dashboard.Action>
-    
-    var body: some View {
-        VStack(spacing: 10) {
+    struct UpperView: View {
+        
+        let viewStore: ViewStore<Dashboard.State, Dashboard.Action>
+        
+        var body: some View {
             HStack {
-                Text("Beliebte Filme")
-                    .font(.title3)
-                Spacer()
                 Button(action: {
-                    viewStore.send(.fetchPopularMovies)
+                    viewStore.send(.goToSeen)
                 }, label: {
-                    Image(systemName: "arrow.clockwise")
-                        .resizable()
-                        .tint(.black)
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
+                    Text("Gesehen")
+                        .padding()
+                        .tint(.white)
+                        .background(.purple)
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
                 })
-            }
-            .padding(.horizontal)
-            .onAppear {
-                viewStore.send(.getPopularMoviesFromDatabase)
-            }
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(viewStore.popularMovies) { movie in
-                        VStack {
-                            AsyncImage(url: movie.imageUrl) { image in
-                                image.image?
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .frame(width: 150, height: 200)
-                            Text(movie.title)
-                                .font(.caption)
-                                .frame(width: 150)
-                                .fontWeight(.bold)
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            viewStore.send(.gotToMovie(movie))
-                        }
-                    }
-                }
+                .frame(maxWidth: .infinity)
+                Button(action: {
+                    viewStore.send(.goToWatchlist)
+                }, label: {
+                    Text("Watchlist")
+                        .padding()
+                        .tint(.white)
+                        .background(.purple)
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                        
+                })
+                .frame(maxWidth: .infinity)
             }
         }
-        .padding(.top)
-        .background(.white)
-    }
-}
-
-struct TopRatedMovieCaruselView: View {
-    
-    let viewStore: ViewStore<Dashboard.State, Dashboard.Action>
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            HStack {
-                Text("Beste Bewertung")
-                    .font(.title3)
-                Spacer()
-                Button(action: {
-                    viewStore.send(.fetchTopRatedMovies)
-                }, label: {
-                    Image(systemName: "arrow.clockwise")
-                        .resizable()
-                        .tint(.black)
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                })
-            }
-            .padding(.horizontal)
-            .onAppear {
-                viewStore.send(.getTopRatedMoviesFromDatabase)
-            }
-            
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(viewStore.topRatedMovies) { movie in
-                        VStack {
-                            AsyncImage(url: movie.imageUrl) { image in
-                                image.image?
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .frame(width: 150, height: 200)
-                            Text(movie.title)
-                                .font(.caption)
-                                .frame(width: 150)
-                                .fontWeight(.bold)
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            viewStore.send(.gotToMovie(movie))
-                        }
-                    }
-                }
-            }
-        }
-        .padding(.top)
-        .background(.white)
     }
 }
 

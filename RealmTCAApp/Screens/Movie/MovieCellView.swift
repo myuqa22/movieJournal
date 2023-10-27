@@ -20,8 +20,12 @@ struct MovieCellView: View {
             }
             .frame(width: 50)
             Text(movie.title)
+                .font(.body)
+                .tint(.white)
             Spacer()
             Text(String(format: "%.1f", movie.rating))
+                .font(.body)
+                .tint(.white)
         }
         .foregroundStyle(.black)
     }
