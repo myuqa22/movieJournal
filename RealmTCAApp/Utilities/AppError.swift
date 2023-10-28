@@ -15,6 +15,8 @@ enum AppError: Error, Equatable {
 
     case decodedError
     case writeDatabaseError
+    
+    case missingData
     case other(Error)
 }
 

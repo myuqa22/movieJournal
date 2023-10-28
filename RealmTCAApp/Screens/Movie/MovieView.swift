@@ -60,11 +60,11 @@ struct MovieView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 .frame(height: 350)
-                .background(.blue)
                 .padding(.leading)
                 Spacer()
                 VStack {
                     VStack {
+                        Text("\(viewStore.state.movie.id)")
                         CircularProgressView(progress: viewStore.state.movie.rating, maxProgress: Constants.maxRating)
                             .overlay {
                                 Text(String(format: "%.1f", viewStore.state.movie.rating))
@@ -86,6 +86,7 @@ struct MovieView: View {
                             .overlay {
                                 Text(String(format: "%.1f", viewStore.state.movieAdditional?.customRating ?? .zero))
                                     .fontWeight(.bold)
+                                    .fixedSize(horizontal: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/, vertical: false)
                                     .padding()
                                     .background(Circle().foregroundColor(.black))
                                     .foregroundColor(.white)
@@ -148,13 +149,13 @@ struct MovieView: View {
 #Preview {
     MovieView(
         store: Store(
-            initialState: Movie.State(movie: MovieModel(id: UUID(),
+            initialState: Movie.State(movie: MovieModel(id: 1,
                                                         title: "Movie",
                                                         image: "",
                                                         rating: 5,
                                                         overview: "abc",
                                                         release_date: "Datum"),
-                                      movieAdditional: MovieAdditionalModel(id: UUID(),
+                                      movieAdditional: MovieAdditionalModel(id: 1,
                                                                             bookmarked: false,
                                                                             seen: false,
                                                                             customDescription: "",

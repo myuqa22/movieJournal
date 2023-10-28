@@ -9,7 +9,7 @@ import Foundation
 
 struct MovieAdditionalModel: Equatable, Identifiable, Hashable, Codable {
     
-    let id: UUID
+    let id: Int
     var bookmarked: Bool
     var seen: Bool
     

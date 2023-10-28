@@ -29,12 +29,13 @@ struct MovieRating: Reducer {
     
     struct State: Equatable, Codable, Hashable {
         @BindingState var progress: Double
-        @BindingState var stepCount: Double
+        @BindingState var stepCount: Double = Constants.maxRating
     }
     
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case changeProgress(Double)
+        case saveCustomRating(Double)
     }
     
     var body: some Reducer<State, Action> {
@@ -45,6 +46,8 @@ struct MovieRating: Reducer {
               return .none
             case let .changeProgress(newProgress):
                 state.progress = .minimum(newProgress, state.stepCount)
+                return .none
+            case .saveCustomRating:
                 return .none
             }
         }

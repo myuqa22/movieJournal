@@ -9,7 +9,7 @@ import RealmSwift
 import Foundation
 
 class MovieAdditionalObject: Object {
-    @Persisted(primaryKey: true) var id: UUID
+    @Persisted(primaryKey: true) var id: Int
     @Persisted var bookmarked: Bool
     @Persisted var seen: Bool
     @Persisted var customDescription: String

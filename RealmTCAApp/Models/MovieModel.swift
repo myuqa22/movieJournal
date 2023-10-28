@@ -9,7 +9,7 @@ import Foundation
 
 struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     
-    let id: UUID
+    let id: Int
     let title: String
     let image: String
     let rating: Double

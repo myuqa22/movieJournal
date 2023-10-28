@@ -13,7 +13,7 @@ class MovieSourceCategory: Object {
 }
 class MovieObject: Object {
     
-    @Persisted(primaryKey: true) var id: UUID
+    @Persisted(primaryKey: true) var id: Int
     @Persisted var title: String
     @Persisted var rating: Double
     @Persisted var image: String

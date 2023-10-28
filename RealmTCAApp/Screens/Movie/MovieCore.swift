@@ -86,13 +86,16 @@ struct Movie: Reducer {
                                 return .showError(appError)
                             }
                         }
+                } else {
+                    return .run { send in
+                        await send(.showError(AppError.missingData))
+                    }
                 }
-                return .none
             case .loadOrCreateAdditional:
                 return environment.realm
                     .fetch(
                         MovieAdditionalObject.self,
-                        predicate: NSPredicate(format: "id == %@", state.movie.id as CVarArg))
+                        predicate: NSPredicate(format: "id == %d", state.movie.id as CVarArg))
                     .map { objects -> Movie.Action in
                         if let movieAdditional = objects.first?.movieAdditional {
                             return .setupAdditional(movieAdditional)
@@ -126,8 +129,25 @@ struct Movie: Reducer {
             case let .showError(appError):
                 print(appError)
                 return .none
-            case .movieRating:
-                return .none
+            case let .movieRating(movieRatingAction):
+                switch movieRatingAction {
+                case let .saveCustomRating(rating):
+                    let additional = state.movieAdditional?.movieAdditionalObject
+                    additional?.customRating = rating
+                    if let additional {
+                        return environment.realm.save(additional).map { signal in
+                            switch signal {
+                            case .success:
+                                return .setupAdditional(additional.movieAdditional)
+                            case .failure(let appError):
+                                return .showError(appError)
+                            }
+                        }
+                    }
+                    return .none
+                default:
+                    return .none
+                }
             case .setSheet(isPresented: true):
                 state.isSheetPresented = true
                 return .run { send in
@@ -140,7 +160,7 @@ struct Movie: Reducer {
                 state.movieRating = nil
                 return .cancel(id: CancelID.load)
             case .setSheetIsPresentedDelayCompleted:
-                state.movieRating = MovieRating.State(progress: 2, stepCount: 10)
+                state.movieRating = MovieRating.State(progress: state.movieAdditional?.customRating ?? .zero)
                 return .none
             }
         }

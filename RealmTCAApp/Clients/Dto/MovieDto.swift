@@ -17,7 +17,7 @@ struct MovieDto: Codable {
     
     var movieObject: MovieObject {
         let movie = MovieObject()
-        movie.id = UUID(self.id)
+        movie.id = self.id
         movie.title = title
         movie.image = poster_path
         movie.rating = vote_average

@@ -10,5 +10,12 @@ import Foundation
 final class Constants {
     
     static let maxRating: CGFloat = 10
-
+    
+    static let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 0
+        return formatter
+    }()
 }

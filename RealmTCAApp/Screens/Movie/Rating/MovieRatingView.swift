@@ -13,14 +13,6 @@ struct MovieRatingView: View {
     
     let store: StoreOf<MovieRating>
     
-    let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 1
-        formatter.maximumFractionDigits = 1
-        return formatter
-    }()
-    
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 20) {
@@ -38,7 +30,7 @@ struct MovieRatingView: View {
                             TextField(String(), value: viewStore.binding(get: \.progress,
                                                                          send: {
                                 .changeProgress(Double($0))
-                            }), formatter: formatter)
+                            }), formatter: Constants.formatter)
                             .font(.title)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)
@@ -52,6 +44,9 @@ struct MovieRatingView: View {
                     .tint(.accentColor)
             }
             .padding()
+            .onDisappear {
+                viewStore.send(.saveCustomRating(viewStore.state.progress))
+            }
         }
     }
 }
