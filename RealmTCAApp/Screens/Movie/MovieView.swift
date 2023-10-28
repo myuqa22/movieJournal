@@ -26,7 +26,8 @@ struct MovieView: View {
                             ForEach(viewStore.genres) { genre in
                                 Text(genre.name)
                                     .font(.caption)
-                                    .padding(10)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
                                     .background(.white)
                                     .foregroundColor(.black)
                                     .cornerRadius(20)

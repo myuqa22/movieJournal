@@ -93,8 +93,8 @@ struct DashboardView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .tint(.white)
-                        .background(.purple)
+                        .tint(.black)
+                        .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
                         
                 })
@@ -108,14 +108,28 @@ struct DashboardView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .tint(.white)
-                        .background(.purple)
+                        .tint(.black)
+                        .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
                         
                 })
                 .frame(maxWidth: .infinity)
+                Button(action: {
+                    
+                }, label: {
+                    Image(systemName: "magnifyingglass")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .padding()
+                        .tint(.black)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10.0))
+                        
+                })
                 
-            } .frame(maxWidth: .infinity)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 20)
         }
     }
 }
