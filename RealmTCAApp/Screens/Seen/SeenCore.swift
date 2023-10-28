@@ -34,7 +34,7 @@ struct Seen: Reducer {
     }
     
     enum Action: Equatable, Sendable {
-        case loadAdditional
+        case loadData
         case updateMovieAdditional([MovieAdditionalModel])
         case loadMovies
         case updateMovies([MovieModel])
@@ -46,7 +46,7 @@ struct Seen: Reducer {
         
         Reduce { state, action in
             switch action {
-            case .loadAdditional:
+            case .loadData:
                 return environment.realm.fetch(MovieAdditionalObject.self)
                     .map { results -> Seen.Action in
                         let seenMoviesAdditional = Array(results.filter { $0.seen }.map { $0.movieAdditional })

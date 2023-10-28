@@ -49,7 +49,7 @@ final class SeenCoreTests: XCTestCase {
             $0.continuousClock = ImmediateClock()
         }
         
-        await store.send(.loadAdditional)
+        await store.send(.loadData)
         await store.receive(.updateMovieAdditional([additionalMovieObject.movieAdditional]), timeout: 1) { state in
             state.additional = [additionalMovieObject.movieAdditional]
         }
@@ -86,7 +86,7 @@ final class SeenCoreTests: XCTestCase {
             $0.continuousClock = ImmediateClock()
         }
         
-        await store.send(.loadAdditional)
+        await store.send(.loadData)
         await store.receive(.updateMovieAdditional([]), timeout: 1)
         await store.receive(.loadMovies, timeout: 1)
         await store.receive(.updateMovies([]), timeout: 1)

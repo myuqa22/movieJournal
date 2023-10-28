@@ -30,7 +30,7 @@ struct SeenView: View {
             .padding(.horizontal)
             .navigationTitle("Gesehen")
             .onAppear {
-                viewStore.send(.loadAdditional)
+                viewStore.send(.loadData)
             }
             
         }

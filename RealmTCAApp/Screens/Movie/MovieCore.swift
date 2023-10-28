@@ -31,6 +31,8 @@ struct Movie: Reducer {
         
         var movie: MovieModel
         var movieAdditional: MovieAdditionalModel?
+        var movieRating: MovieRating.State?
+        var isSheetPresented = false
     }
     
     enum Action: Equatable {
@@ -42,7 +44,15 @@ struct Movie: Reducer {
         case seenButtonTapped
         case setupAdditional(MovieAdditionalModel)
         case createAdditional
+        case customRatingButtonTapped
+        
+        case movieRating(MovieRating.Action)
+        case setSheet(isPresented: Bool)
+        case setSheetIsPresentedDelayCompleted
     }
+    
+    @Dependency(\.continuousClock) var clock
+    private enum CancelID { case load }
     
     var body: some ReducerOf<Self> {
         
@@ -110,11 +120,32 @@ struct Movie: Reducer {
             case let .setupAdditional(model):
                 state.movieAdditional = model
                 return .none
+            case .customRatingButtonTapped:
                 
+                return .none
             case let .showError(appError):
                 print(appError)
                 return .none
+            case .movieRating:
+                return .none
+            case .setSheet(isPresented: true):
+                state.isSheetPresented = true
+                return .run { send in
+                  try await self.clock.sleep(for: .seconds(1))
+                  await send(.setSheetIsPresentedDelayCompleted)
+                }
+                .cancellable(id: CancelID.load)
+            case .setSheet(isPresented: false):
+                state.isSheetPresented = false
+                state.movieRating = nil
+                return .cancel(id: CancelID.load)
+            case .setSheetIsPresentedDelayCompleted:
+                state.movieRating = MovieRating.State(progress: 2, stepCount: 10)
+                return .none
             }
+        }
+        .ifLet(\.movieRating, action: /Action.movieRating) {
+          MovieRating()
         }
     }
     

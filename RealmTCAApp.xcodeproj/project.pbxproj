@@ -11,6 +11,10 @@
 		A14420182AE6C39A007D79DD /* MoviesDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14420172AE6C39A007D79DD /* MoviesDto.swift */; };
 		A144201A2AE6E35C007D79DD /* MovieSourceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14420192AE6E35C007D79DD /* MovieSourceCategory.swift */; };
 		A1BF36A42AEC49C200CF2C46 /* MovieDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BF36A32AEC49C200CF2C46 /* MovieDto.swift */; };
+		A1BF36A72AEC58B400CF2C46 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BF36A62AEC58B400CF2C46 /* CircularProgressView.swift */; };
+		A1BF36AA2AEC5EFB00CF2C46 /* MovieRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BF36A92AEC5EFB00CF2C46 /* MovieRatingView.swift */; };
+		A1BF36AC2AEC5F1100CF2C46 /* MovieRatingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BF36AB2AEC5F1100CF2C46 /* MovieRatingCore.swift */; };
+		A1BF36AE2AED202400CF2C46 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BF36AD2AED202400CF2C46 /* Constants.swift */; };
 		A1DC8E562AE2C9C20035EFF6 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DC8E552AE2C9C20035EFF6 /* AppView.swift */; };
 		A1DC8E5A2AE2C9C40035EFF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1DC8E592AE2C9C40035EFF6 /* Assets.xcassets */; };
 		A1DC8E5E2AE2C9C40035EFF6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1DC8E5D2AE2C9C40035EFF6 /* Preview Assets.xcassets */; };
@@ -67,6 +71,10 @@
 		A14420172AE6C39A007D79DD /* MoviesDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDto.swift; sourceTree = "<group>"; };
 		A14420192AE6E35C007D79DD /* MovieSourceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSourceCategory.swift; sourceTree = "<group>"; };
 		A1BF36A32AEC49C200CF2C46 /* MovieDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDto.swift; sourceTree = "<group>"; };
+		A1BF36A62AEC58B400CF2C46 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		A1BF36A92AEC5EFB00CF2C46 /* MovieRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRatingView.swift; sourceTree = "<group>"; };
+		A1BF36AB2AEC5F1100CF2C46 /* MovieRatingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRatingCore.swift; sourceTree = "<group>"; };
+		A1BF36AD2AED202400CF2C46 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A1DC8E522AE2C9C20035EFF6 /* RealmTCAApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealmTCAApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1DC8E552AE2C9C20035EFF6 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		A1DC8E592AE2C9C40035EFF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,6 +137,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1BF36A52AEC581A00CF2C46 /* Elements */ = {
+			isa = PBXGroup;
+			children = (
+				A1BF36A62AEC58B400CF2C46 /* CircularProgressView.swift */,
+			);
+			path = Elements;
+			sourceTree = "<group>";
+		};
+		A1BF36A82AEC5EDC00CF2C46 /* Rating */ = {
+			isa = PBXGroup;
+			children = (
+				A1BF36A92AEC5EFB00CF2C46 /* MovieRatingView.swift */,
+				A1BF36AB2AEC5F1100CF2C46 /* MovieRatingCore.swift */,
+			);
+			path = Rating;
+			sourceTree = "<group>";
+		};
 		A1DC8E492AE2C9C20035EFF6 = {
 			isa = PBXGroup;
 			children = (
@@ -218,6 +243,7 @@
 		A1EC7BBB2AE2FDB3002DDD24 /* Movie */ = {
 			isa = PBXGroup;
 			children = (
+				A1BF36A82AEC5EDC00CF2C46 /* Rating */,
 				A1EC7BBC2AE2FDD4002DDD24 /* MovieView.swift */,
 				A1EC7BE72AE65DFE002DDD24 /* MovieCore.swift */,
 				A14420152AE6BFFF007D79DD /* MovieCellView.swift */,
@@ -237,6 +263,7 @@
 		A1EC7BC72AE3F337002DDD24 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				A1BF36A52AEC581A00CF2C46 /* Elements */,
 				A1EC7BED2AE6A540002DDD24 /* Watchlist */,
 				A1EC7BB42AE2D835002DDD24 /* Seen */,
 				A1EC7BBB2AE2FDB3002DDD24 /* Movie */,
@@ -259,6 +286,7 @@
 				A1EC7BD12AE3FF69002DDD24 /* Signal.swift */,
 				A1EC7BE52AE65ABD002DDD24 /* AppError.swift */,
 				A14420192AE6E35C007D79DD /* MovieSourceCategory.swift */,
+				A1BF36AD2AED202400CF2C46 /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -460,18 +488,22 @@
 				A1EC7BCC2AE3F866002DDD24 /* SeenCore.swift in Sources */,
 				A1EC7BDD2AE47FD4002DDD24 /* MoviesClient.swift in Sources */,
 				A1EC7BEA2AE679FB002DDD24 /* MovieAdditionalObject.swift in Sources */,
+				A1BF36AE2AED202400CF2C46 /* Constants.swift in Sources */,
 				A1EC7BE82AE65DFE002DDD24 /* MovieCore.swift in Sources */,
 				A1EC7BE62AE65ABD002DDD24 /* AppError.swift in Sources */,
 				A1EC7BBD2AE2FDD4002DDD24 /* MovieView.swift in Sources */,
 				A1EC7BEC2AE67A9C002DDD24 /* MovieAdditionalModel.swift in Sources */,
 				A1EC7BDA2AE47ECE002DDD24 /* DashboardCore.swift in Sources */,
+				A1BF36AA2AEC5EFB00CF2C46 /* MovieRatingView.swift in Sources */,
 				A14420162AE6BFFF007D79DD /* MovieCellView.swift in Sources */,
+				A1BF36AC2AEC5F1100CF2C46 /* MovieRatingCore.swift in Sources */,
 				A1EC7BF12AE6A5A0002DDD24 /* WatchlistCore.swift in Sources */,
 				A1DC8E562AE2C9C20035EFF6 /* AppView.swift in Sources */,
 				A1DC8E8A2AE2CE150035EFF6 /* DashboardView.swift in Sources */,
 				A1EC7BC52AE3EF2C002DDD24 /* Dashboard+Path.swift in Sources */,
 				A1EC7BEF2AE6A594002DDD24 /* WatchlistView.swift in Sources */,
 				A1BF36A42AEC49C200CF2C46 /* MovieDto.swift in Sources */,
+				A1BF36A72AEC58B400CF2C46 /* CircularProgressView.swift in Sources */,
 				A1EC7BD22AE3FF69002DDD24 /* Signal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
