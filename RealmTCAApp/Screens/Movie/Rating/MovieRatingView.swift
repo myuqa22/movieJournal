@@ -37,10 +37,10 @@ struct MovieRatingView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)
+                            .keyboardType(.decimalPad)
                         }
                         Spacer()
                     }
-                    .keyboardType(.numberPad)
                 }
                 .frame(width: 300)
                 Slider(value: viewStore.binding(get: \.progress, send: {

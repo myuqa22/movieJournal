@@ -23,6 +23,7 @@ struct MovieRatingEnvironment {
         
         self.realm = realm
     }
+    
 }
 
 struct MovieRating: Reducer {
