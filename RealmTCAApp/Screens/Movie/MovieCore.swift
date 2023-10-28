@@ -15,12 +15,15 @@ struct MovieEnvironment {
     let realm: Realm
     
     init() {
+        
         self.realm = try! Realm()
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
+    
 }
 
 struct Movie: Reducer {
@@ -56,6 +59,7 @@ struct Movie: Reducer {
     }
     
     @Dependency(\.continuousClock) var clock
+    
     private enum CancelID { case load }
     
     var body: some ReducerOf<Self> {

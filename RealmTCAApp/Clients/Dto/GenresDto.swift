@@ -10,4 +10,5 @@ import Foundation
 struct GenresDto: Codable {
     
     let genres: [GenreDto]
+    
 }

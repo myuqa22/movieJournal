@@ -17,6 +17,7 @@ struct MovieAdditionalModel: Equatable, Identifiable, Hashable, Codable {
     var customRating: Double
     
     var movieAdditionalObject: MovieAdditionalObject {
+        
         let movieAdditional = MovieAdditionalObject()
         movieAdditional.id = id
         movieAdditional.bookmarked = bookmarked
@@ -26,4 +27,5 @@ struct MovieAdditionalModel: Equatable, Identifiable, Hashable, Codable {
         
         return movieAdditional
     }
+    
 }

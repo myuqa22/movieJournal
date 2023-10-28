@@ -15,10 +15,12 @@ struct SeenEnvironment {
     let realm: Realm
     
     init() {
+        
         self.realm = try! Realm()
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
 }
@@ -34,6 +36,7 @@ struct Seen: Reducer {
     }
     
     enum Action: Equatable, Sendable {
+        
         case loadData
         case updateMovieAdditional([MovieAdditionalModel])
         case loadMovies
@@ -76,4 +79,5 @@ struct Seen: Reducer {
             }
         }
     }
+    
 }

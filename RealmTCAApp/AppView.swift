@@ -12,7 +12,9 @@ import netfox
 
 @main
 struct AppView: App {
+    
     var body: some Scene {
+        
         WindowGroup {
             DashboardView(
                 store: Store(initialState: Dashboard.State()) {
@@ -24,4 +26,5 @@ struct AppView: App {
             }
         }
     }
+    
 }

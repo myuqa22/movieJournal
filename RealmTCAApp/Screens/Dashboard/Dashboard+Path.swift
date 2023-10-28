@@ -12,7 +12,9 @@ import ComposableArchitecture
 extension Dashboard {
     
     struct Path: Reducer {
+        
         enum State: Equatable, Hashable, Codable {
+            
             case dashboard(Dashboard.State = .init())
             case seen(Seen.State = .init())
             case watchlist(Watchlist.State = .init())
@@ -20,6 +22,7 @@ extension Dashboard {
         }
         
         enum Action {
+            
             case dashboard(Dashboard.Action)
             case seen(Seen.Action)
             case watchlist(Watchlist.Action)
@@ -42,4 +45,5 @@ extension Dashboard {
             }
         }
     }
+    
 }

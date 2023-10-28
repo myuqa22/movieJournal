@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-import RealmSwift
 import ComposableArchitecture
+import RealmSwift
 
 struct SeenView: View {
     
     let store: StoreOf<Seen>
     
     var body: some View {
+        
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
@@ -32,12 +33,13 @@ struct SeenView: View {
             .onAppear {
                 viewStore.send(.loadData)
             }
-            
         }
     }
+    
 }
 
 #Preview {
+    
     SeenView(store: Store(initialState: Seen.State.init(), reducer: {
         Seen()
     }))

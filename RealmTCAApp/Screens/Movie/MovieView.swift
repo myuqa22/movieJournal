@@ -14,13 +14,13 @@ struct MovieView: View {
     let store: StoreOf<Movie>
     
     var body: some View {
+        
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
                     Text(viewStore.movie.title)
                         .font(.largeTitle)
                     UpperView(viewStore: viewStore)
-                    
                     ScrollView(.horizontal) {
                         HStack {
                             ForEach(viewStore.genres) { genre in
@@ -33,7 +33,6 @@ struct MovieView: View {
                                     .cornerRadius(20)
                             }
                         }
-        
                     }
                     .onAppear {
                         viewStore.send(.loadGenres)
@@ -61,7 +60,6 @@ struct MovieView: View {
                     ProgressView()
                 }
                 .presentationDetents([.medium])
-                
             }
         }
     }
@@ -125,7 +123,8 @@ struct MovieView: View {
                         Button(action: {
                             viewStore.send(.watchlistButtonTapped)
                         }, label: {
-                            Image(systemName: "\(viewStore.movieAdditional?.bookmarked ?? false ? "bookmark.fill" : "bookmark")")
+                            Image(systemName: 
+                                    "\(viewStore.movieAdditional?.bookmarked ?? false ? "bookmark.fill" : "bookmark")")
                                 .font(.title)
                         })
                         .padding()
@@ -154,18 +153,17 @@ struct MovieView: View {
                             .fontWeight(.bold)
                             .font(.caption2)
                     }.padding(.horizontal)
-                    
                     Spacer()
                 }
                 Spacer()
             }
         }
     }
+    
 }
 
-
-
 #Preview {
+    
     MovieView(
         store: Store(
             initialState: Movie.State(

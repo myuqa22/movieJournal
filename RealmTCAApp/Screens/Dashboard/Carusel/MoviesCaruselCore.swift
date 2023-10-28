@@ -15,12 +15,15 @@ struct MoviesCaruselEnvironment {
     let realm: Realm
     
     init() {
+        
         self.realm = try! Realm()
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
+    
 }
 
 struct MoviesCarusel: Reducer {
@@ -28,11 +31,13 @@ struct MoviesCarusel: Reducer {
     let environment = MoviesCaruselEnvironment()
     
     struct State: Equatable, Codable, Hashable {
+        
         let category: MovieSourceCategoryType
         var movies: IdentifiedArrayOf<MovieModel> = []
     }
     
     enum Action {
+        
         case showError(AppError)
         
         case fetchMovies
@@ -112,6 +117,5 @@ struct MoviesCarusel: Reducer {
             }
         }
     }
+    
 }
-
-

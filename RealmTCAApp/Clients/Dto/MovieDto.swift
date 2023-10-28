@@ -8,6 +8,7 @@
 import Foundation
 
 struct MovieDto: Codable {
+    
     let id: Int
     let title: String
     let overview: String
@@ -16,11 +17,13 @@ struct MovieDto: Codable {
     let vote_average: Double
     
     let genre_ids: [Int]
+    
 }
 
 extension MovieDto {
     
     var movieObject: MovieObject {
+        
         let movie = MovieObject()
         movie.id = self.id
         movie.title = title

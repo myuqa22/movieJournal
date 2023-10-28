@@ -14,9 +14,9 @@ struct MovieRatingView: View {
     let store: StoreOf<MovieRating>
     
     var body: some View {
+        
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 20) {
-                
                 CircularProgressView(progress: viewStore.progress,
                                      maxProgress: viewStore.stepCount,
                                      lineWidth: 20)
@@ -27,10 +27,13 @@ struct MovieRatingView: View {
                             Text("Meine Bewertung")
                                 .font(.title2)
                                 .foregroundStyle(.white)
-                            TextField(String(), value: viewStore.binding(get: \.progress,
-                                                                         send: {
-                                .changeProgress(Double($0))
-                            }), formatter: Constants.formatter)
+                            TextField(String(),
+                                      value: viewStore.binding(
+                                        get: \.progress,
+                                        send: {
+                                            .changeProgress(Double($0))
+                                        }),
+                                      formatter: Constants.oneMaximumFractionDigitsFormatter)
                             .font(.title)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)
@@ -61,9 +64,11 @@ struct MovieRatingView: View {
             }
         }
     }
+    
 }
 
 #Preview {
+    
     MovieRatingView(store: Store(initialState: MovieRating.State(progress: 0, stepCount: 1), reducer: {
         MovieRating()
     }))

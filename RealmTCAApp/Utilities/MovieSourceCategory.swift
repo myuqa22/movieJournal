@@ -8,11 +8,13 @@
 import Foundation
 
 enum MovieSourceCategoryType: String, Codable, Hashable {
+    
     case popular
     case topRated
     case nowPlaying
     
     var title: String {
+        
         switch self {
         case .popular:
             return "Derzeit beliebt"
@@ -22,4 +24,5 @@ enum MovieSourceCategoryType: String, Codable, Hashable {
             return "Neuerscheinungen"
         }
     }
+    
 }

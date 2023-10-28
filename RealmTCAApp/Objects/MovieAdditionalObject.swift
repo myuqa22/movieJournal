@@ -5,10 +5,12 @@
 //  Created by Privat on 23.10.23.
 //
 
-import RealmSwift
 import Foundation
 
+import RealmSwift
+
 class MovieAdditionalObject: Object {
+    
     @Persisted(primaryKey: true) var id: Int
     @Persisted var bookmarked: Bool
     @Persisted var seen: Bool
@@ -19,10 +21,12 @@ class MovieAdditionalObject: Object {
 extension MovieAdditionalObject {
     
     var movieAdditional: MovieAdditionalModel {
+        
         .init(id: id,
               bookmarked: bookmarked,
               seen: seen,
               customDescription: customDescription,
               customRating: customRating)
     }
+    
 }

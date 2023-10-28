@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import RealmSwift
 
 struct MovieModel: Equatable, Identifiable, Hashable, Codable {
@@ -19,10 +20,12 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     let genre_ids: [Int]
     
     var imageUrl: URL {
+        
         URL(string: "https://image.tmdb.org/t/p/w500" + image)!
     }
     
     var movieObject: MovieObject {
+        
         let movie = MovieObject()
         movie.id = id
         movie.title = title
@@ -34,4 +37,5 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     
         return movie
     }
+    
 }

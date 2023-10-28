@@ -6,11 +6,10 @@
 //
 
 import Combine
-import Foundation
+import SwiftUI
 
 import ComposableArchitecture
 import RealmSwift
-import SwiftUI
 
 extension Realm {
     
@@ -39,9 +38,9 @@ extension Realm {
                 print(error)
                 return promise(.success(.failure(AppError.writeDatabaseError)))
             }
-        }.eraseToAnyPublisher
+        }
         
-        return Effect.publisher(promise)
+        return Effect.publisher(promise.eraseToAnyPublisher)
     }
     
     func save<T: Object>(_ object: T) -> Effect<Signal> {
@@ -55,9 +54,9 @@ extension Realm {
             } catch {
                 return promise(.success(.failure(AppError.writeDatabaseError)))
             }
-        }.eraseToAnyPublisher
+        }
         
-        return Effect.publisher(promise)
+        return Effect.publisher(promise.eraseToAnyPublisher)
     }
     
     func create<T: Object>(_ type: T.Type, object: T) -> Effect<Signal> {
@@ -72,6 +71,7 @@ extension Realm {
                 promise(.success(.failure(.writeDatabaseError)))
             }
         }
+        
         return Effect.publisher(promise.eraseToAnyPublisher)
     }
     

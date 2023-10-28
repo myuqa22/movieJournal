@@ -9,12 +9,12 @@ import SwiftUI
 
 import ComposableArchitecture
 
-// MARK: View
 struct DashboardView: View {
     
     let store: StoreOf<Dashboard>
     
     var body: some View {
+        
         NavigationStackStore(self.store.scope(state: \.path, action: { .path($0) })) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
                 ZStack {
@@ -84,6 +84,7 @@ struct DashboardView: View {
         let viewStore: ViewStore<Dashboard.State, Dashboard.Action>
         
         var body: some View {
+            
             HStack {
                 Button(action: {
                     viewStore.send(.goToSeen)
@@ -132,9 +133,11 @@ struct DashboardView: View {
             .padding(.horizontal, 20)
         }
     }
+    
 }
 
 #Preview {
+    
     DashboardView(
         store: Store(initialState: Dashboard.State(),
                      reducer: { Dashboard() })

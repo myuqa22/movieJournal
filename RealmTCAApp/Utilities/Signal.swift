@@ -8,12 +8,16 @@
 import Foundation
 
 enum Signal: Equatable {
+    
     case success
     case failure(AppError)
 }
 
 extension Signal {
+    
     static func ==(lhs: Self, rhs: Self) -> Bool {
-        return true
+        
+        true
     }
+    
 }

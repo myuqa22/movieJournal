@@ -14,6 +14,7 @@ struct MoviesCaruselView: View {
     let store: StoreOf<MoviesCarusel>
     
     var body: some View {
+        
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 HStack {
@@ -57,9 +58,11 @@ struct MoviesCaruselView: View {
             .background(.black)
         }
     }
+    
 }
 
 #Preview {
+    
     MoviesCaruselView(store: Store(initialState: MoviesCarusel.State.init(category: .popular), reducer: {
         MoviesCarusel()
     }))

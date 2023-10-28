@@ -15,10 +15,12 @@ struct MovieRatingEnvironment {
     let realm: Realm
     
     init() {
+        
         self.realm = try! Realm()
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
 }
@@ -28,11 +30,13 @@ struct MovieRating: Reducer {
     let environment = MovieRatingEnvironment()
     
     struct State: Equatable, Codable, Hashable {
+        
         @BindingState var progress: Double
         @BindingState var stepCount: Double = Constants.maxRating
     }
     
     enum Action: BindableAction, Equatable {
+        
         case binding(BindingAction<State>)
         case changeProgress(Double)
         case saveCustomRating(Double)
@@ -40,7 +44,9 @@ struct MovieRating: Reducer {
     }
     
     @Dependency(\.dismiss) var dismiss
+    
     var body: some Reducer<State, Action> {
+        
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -56,4 +62,5 @@ struct MovieRating: Reducer {
             }
         }
     }
+    
 }

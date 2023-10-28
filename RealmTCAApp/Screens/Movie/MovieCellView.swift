@@ -29,8 +29,17 @@ struct MovieCellView: View {
         }
         .foregroundStyle(.black)
     }
+    
 }
 
 #Preview {
-    MovieCellView(movie: MovieModel(id: 1, title: "abc", image: "", rating: 2.0, overview: "", release_date: "", genre_ids: []))
+    
+    MovieCellView(
+        movie: MovieModel(id: 1,
+                          title: "abc",
+                          image: "", 
+                          rating: 2.0,
+                          overview: "", 
+                          release_date: "",
+                          genre_ids: []))
 }

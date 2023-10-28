@@ -5,12 +5,15 @@
 //  Created by Privat on 21.10.23.
 //
 
-import RealmSwift
 import Foundation
 
+import RealmSwift
+
 class MovieSourceCategory: Object {
+    
     @Persisted var category: String
 }
+
 class MovieObject: Object {
     
     @Persisted(primaryKey: true) var id: Int
@@ -27,6 +30,7 @@ class MovieObject: Object {
 extension MovieObject {
     
     var movie: MovieModel {
+        
         .init(id: id,
               title: title,
               image: image,
@@ -35,4 +39,5 @@ extension MovieObject {
               release_date: release,
               genre_ids: Array(genre_ids))
     }
+    
 }

@@ -10,17 +10,22 @@ import Foundation
 import ComposableArchitecture
 
 struct MoviesClient {
+    
     var popularMovies: @Sendable () async throws -> MoviesDto
     var topRatedMovies:  @Sendable () async throws -> MoviesDto
     var nowPlayingMovies: @Sendable () async throws -> MoviesDto
     var genreMovies: @Sendable () async throws -> GenresDto
+    
 }
 
 extension DependencyValues {
+    
   var moviesClient: MoviesClient {
+      
     get { self[MoviesClient.self] }
     set { self[MoviesClient.self] = newValue }
   }
+    
 }
 
 extension MoviesClient: DependencyKey {
@@ -87,9 +92,11 @@ extension MoviesClient: DependencyKey {
     /// This is the "unimplemented" fact dependency that is useful to plug into tests that you want
     /// to prove do not need the dependency.
     static let testValue = Self(
+        
         popularMovies: unimplemented("\(Self.self).popularMovies"),
         topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
         nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies"),
         genreMovies: unimplemented("\(Self.self).genreMovies")
     )
+    
 }

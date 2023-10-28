@@ -8,7 +8,6 @@
 import Foundation
 
 import RealmSwift
-import Foundation
 
 class GenreObject: Object {
     
@@ -19,7 +18,9 @@ class GenreObject: Object {
 extension GenreObject {
     
     var genre: GenreModel {
+        
         .init(id: id,
               name: name)
     }
+    
 }

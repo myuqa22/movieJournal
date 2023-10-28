@@ -10,6 +10,7 @@ import Foundation
 enum AppError: Error, Equatable {
     
     static func == (lhs: AppError, rhs: AppError) -> Bool {
+        
         true
     }
 
@@ -19,4 +20,3 @@ enum AppError: Error, Equatable {
     case missingData
     case other(Error)
 }
-

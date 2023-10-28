@@ -14,6 +14,7 @@ struct WatchlistView: View {
     let store: StoreOf<Watchlist>
     
     var body: some View {
+        
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
@@ -33,9 +34,11 @@ struct WatchlistView: View {
             .navigationTitle("Watchlist")
         }
     }
+    
 }
 
 #Preview {
+    
     WatchlistView(store: Store(initialState: Watchlist.State(), reducer: {
         Watchlist()
     }))

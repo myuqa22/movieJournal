@@ -22,6 +22,7 @@ struct DashboardEnvironment {
         
         self.realm = realm
     }
+    
 }
 
 // MARK: Reducer
@@ -75,6 +76,7 @@ struct Dashboard: Reducer {
         }
         
         Reduce { state, action in
+            
             switch action {
             case let .popularMoviesCarusel(movieCaruselAction):
                 switch movieCaruselAction {
@@ -120,7 +122,6 @@ struct Dashboard: Reducer {
                 default:
                     return .none
                 }
-                
             case .showError(let appError):
                 print(appError)
                 return .none

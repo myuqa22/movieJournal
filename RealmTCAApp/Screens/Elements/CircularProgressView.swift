@@ -14,6 +14,7 @@ struct CircularProgressView: View {
     var lineWidth: CGFloat = 5
     
     var foregroundColor: Color {
+        
         let quarterOf = maxProgress / 4
         if progress < quarterOf {
             return .red
@@ -27,13 +28,12 @@ struct CircularProgressView: View {
     }
     
     var body: some View {
+        
         ZStack {
             Circle()
                 .stroke(lineWidth: 5)
                 .opacity(0.2)
                 .foregroundColor(.white)
-            
-            // Foreground or the actual progress bar
             Circle()
                 .trim(from: 0.0, to: min(progress / maxProgress, 1))
                 .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
@@ -43,8 +43,10 @@ struct CircularProgressView: View {
                 .animation(.linear, value: foregroundColor)
         }
     }
+    
 }
 
 #Preview {
+    
     CircularProgressView(progress: 10, maxProgress: 10, lineWidth: 20)
 }

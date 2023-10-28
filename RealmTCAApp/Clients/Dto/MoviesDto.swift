@@ -13,4 +13,5 @@ struct MoviesDto: Codable {
     let results: [MovieDto]
     let total_pages: Int
     let total_results: Int
+    
 }
