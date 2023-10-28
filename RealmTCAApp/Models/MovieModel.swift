@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     
@@ -15,6 +16,7 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     let rating: Double
     let overview: String
     let release_date: String
+    let genre_ids: [Int]
     
     var imageUrl: URL {
         URL(string: "https://image.tmdb.org/t/p/w500" + image)!
@@ -28,7 +30,8 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
         movie.rating = rating
         movie.overview = overview
         movie.release = release_date
-        
+        movie.genre_ids.append(objectsIn: genre_ids)
+    
         return movie
     }
 }

@@ -33,6 +33,7 @@ struct Movie: Reducer {
         var movieAdditional: MovieAdditionalModel?
         var movieRating: MovieRating.State?
         var isSheetPresented = false
+        var genres: [GenreModel] = []
     }
     
     enum Action: Equatable {
@@ -49,6 +50,9 @@ struct Movie: Reducer {
         case movieRating(MovieRating.Action)
         case setSheet(isPresented: Bool)
         case setSheetIsPresentedDelayCompleted
+        
+        case loadGenres
+        case updateGenres([GenreModel])
     }
     
     @Dependency(\.continuousClock) var clock
@@ -143,16 +147,21 @@ struct Movie: Reducer {
                                 return .showError(appError)
                             }
                         }
+                    } else {
+                        return .none
                     }
-                    return .none
+                case .saveButtonTapped:
+                    return .run { send in
+                        await send(.setSheet(isPresented: false))
+                    }
                 default:
                     return .none
                 }
             case .setSheet(isPresented: true):
                 state.isSheetPresented = true
                 return .run { send in
-                  try await self.clock.sleep(for: .seconds(1))
-                  await send(.setSheetIsPresentedDelayCompleted)
+                    try await self.clock.sleep(for: .seconds(0.5))
+                    await send(.setSheetIsPresentedDelayCompleted)
                 }
                 .cancellable(id: CancelID.load)
             case .setSheet(isPresented: false):
@@ -162,10 +171,21 @@ struct Movie: Reducer {
             case .setSheetIsPresentedDelayCompleted:
                 state.movieRating = MovieRating.State(progress: state.movieAdditional?.customRating ?? .zero)
                 return .none
+            case .loadGenres:
+                return environment.realm.fetch(GenreObject.self)
+                    .map { results in
+                        print(results.map { $0.genre} )
+                        let genres = Array(results.map { $0.genre })
+                        return .updateGenres(genres)
+                    }
+            case let .updateGenres(genres):
+                let genreIds = Set(state.movie.genre_ids)
+                state.genres = genres.filter { genreIds.contains($0.id) }
+                return .none
             }
         }
         .ifLet(\.movieRating, action: /Action.movieRating) {
-          MovieRating()
+            MovieRating()
         }
     }
     

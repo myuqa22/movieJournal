@@ -20,12 +20,30 @@ struct MovieView: View {
                     Text(viewStore.movie.title)
                         .font(.largeTitle)
                     UpperView(viewStore: viewStore)
+                    
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(viewStore.genres) { genre in
+                                Text(genre.name)
+                                    .font(.caption)
+                                    .padding(10)
+                                    .background(.white)
+                                    .foregroundColor(.black)
+                                    .cornerRadius(20)
+                            }
+                        }
+        
+                    }
+                    .onAppear {
+                        viewStore.send(.loadGenres)
+                    }
                     Text(viewStore.movie.overview)
                     Spacer()
                 }
                 .padding(.horizontal)
                 .toolbarTitleDisplayMode(.inline)
                 .onAppear {
+                    viewStore.send(.loadGenres)
                     viewStore.send(.loadOrCreateAdditional)
                 }
             }
@@ -149,17 +167,20 @@ struct MovieView: View {
 #Preview {
     MovieView(
         store: Store(
-            initialState: Movie.State(movie: MovieModel(id: 1,
-                                                        title: "Movie",
-                                                        image: "",
-                                                        rating: 5,
-                                                        overview: "abc",
-                                                        release_date: "Datum"),
-                                      movieAdditional: MovieAdditionalModel(id: 1,
-                                                                            bookmarked: false,
-                                                                            seen: false,
-                                                                            customDescription: "",
-                                                                            customRating: 5)),
+            initialState: Movie.State(
+                movie: MovieModel(id: 1,
+                                  title: "Movie",
+                                  image: "",
+                                  rating: 5,
+                                  overview: "abc",
+                                  release_date: "Datum",
+                                  genre_ids: []),
+                movieAdditional: MovieAdditionalModel(id: 1,
+                                                      bookmarked: false,
+                                                      seen: false,
+                                                      customDescription: "",
+                                                      customRating: 5),
+            genres: [GenreModel(id: 2, name: "Abenteuer")]),
             reducer: {
                 Movie()
             }

@@ -19,6 +19,7 @@ struct DashboardEnvironment {
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
 }
@@ -42,6 +43,7 @@ struct Dashboard: Reducer {
     enum Action {
         
         case showError(AppError)
+        case none
         
         case goToSeen
         case goToWatchlist
@@ -51,6 +53,9 @@ struct Dashboard: Reducer {
         case popularMoviesCarusel(MoviesCarusel.Action)
         case topRatedMoviesCarusel(MoviesCarusel.Action)
         case nowPlayingMoviesCarusel(MoviesCarusel.Action)
+        
+        case fetchGenreMovies
+        case genreMoviesReponse(TaskResult<GenresDto>)
     }
     
     @Dependency(\.moviesClient) var movieClient
@@ -118,6 +123,29 @@ struct Dashboard: Reducer {
                 
             case .showError(let appError):
                 print(appError)
+                return .none
+            case .fetchGenreMovies:
+                return .run { send in
+                    await send(.genreMoviesReponse(.init {
+                        try await self.movieClient.genreMovies()
+                    }))
+                }
+            case let .genreMoviesReponse(.success(dto)):
+                let objects = dto.genres
+                    .map { $0.genre }
+                return environment.realm.save(objects).map { signal in
+                    switch signal {
+                    case .success:
+                        return .none
+                    case let .failure(appError):
+                        return .showError(appError)
+                    }
+                }
+            case let .genreMoviesReponse(.failure(error)):
+                return .run { send in
+                    await send(.showError(AppError.other(error)))
+                }
+            case .none:
                 return .none
             }
         }

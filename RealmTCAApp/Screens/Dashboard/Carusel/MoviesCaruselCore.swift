@@ -67,32 +67,29 @@ struct MoviesCarusel: Reducer {
                         }))
                     }
                 }
-            case let .moviesResponse(result):
-                switch result {
-                case let .success(dto):
-                    let objects = dto.results
-                        .map { $0.movieObject }
-                        .map {
-                            if !$0.categories
-                                .contains(where: { $0.category == MovieSourceCategoryType.topRated.rawValue }) {
-                                let category = MovieSourceCategory()
-                                category.category = state.category.rawValue
-                                $0.categories.append(category)
-                            }
-                            return $0
+            case let .moviesResponse(.success(dto)):
+                let objects = dto.results
+                    .map { $0.movieObject }
+                    .map {
+                        if !$0.categories
+                            .contains(where: { $0.category == MovieSourceCategoryType.topRated.rawValue }) {
+                            let category = MovieSourceCategory()
+                            category.category = state.category.rawValue
+                            $0.categories.append(category)
                         }
-                    return environment.realm.save(objects).map { signal in
-                        switch signal {
-                        case .success:
-                            return .getMoviesFromDatabase
-                        case let .failure(appError):
-                            return .showError(appError)
-                        }
+                        return $0
                     }
-                case let .failure(error):
-                    return .run { send in
-                        await send(.showError(AppError.other(error)))
+                return environment.realm.save(objects).map { signal in
+                    switch signal {
+                    case .success:
+                        return .getMoviesFromDatabase
+                    case let .failure(appError):
+                        return .showError(appError)
                     }
+                }
+            case let .moviesResponse(.failure(error)):
+                return .run { send in
+                    await send(.showError(AppError.other(error)))
                 }
             case .getMoviesFromDatabase:
                 return environment.realm

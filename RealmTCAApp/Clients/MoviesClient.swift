@@ -13,6 +13,7 @@ struct MoviesClient {
     var popularMovies: @Sendable () async throws -> MoviesDto
     var topRatedMovies:  @Sendable () async throws -> MoviesDto
     var nowPlayingMovies: @Sendable () async throws -> MoviesDto
+    var genreMovies: @Sendable () async throws -> GenresDto
 }
 
 extension DependencyValues {
@@ -67,7 +68,19 @@ extension MoviesClient: DependencyKey {
             let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
             
             return decoded
+        }, genreMovies: {
+            try await Task.sleep(for: .seconds(1))
             
+            var url = URL(string: "https://api.themoviedb.org/3/genre/movie/list?language=de")!
+        
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
+            
+            let (data, _) = try await URLSession.shared
+                .data(for: request)
+            let decoded = try JSONDecoder().decode(GenresDto.self, from: data)
+            
+            return decoded
         }
     )
 
@@ -76,6 +89,7 @@ extension MoviesClient: DependencyKey {
     static let testValue = Self(
         popularMovies: unimplemented("\(Self.self).popularMovies"),
         topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
-        nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies")
+        nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies"),
+        genreMovies: unimplemented("\(Self.self).genreMovies")
     )
 }

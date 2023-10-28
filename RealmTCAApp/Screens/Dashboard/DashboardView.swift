@@ -44,6 +44,9 @@ struct DashboardView: View {
                         }
                     }
                     .navigationTitle("Übersicht")
+                    .onAppear {
+                        viewStore.send(.fetchGenreMovies)
+                    }
                 }
             }
         } destination: { path in

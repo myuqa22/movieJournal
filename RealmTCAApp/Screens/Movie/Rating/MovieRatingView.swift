@@ -40,8 +40,20 @@ struct MovieRatingView: View {
                     .keyboardType(.numberPad)
                 }
                 .frame(width: 300)
-                Slider(value: viewStore.$progress, in: 0...viewStore.state.stepCount)
-                    .tint(.accentColor)
+                Slider(value: viewStore.binding(get: \.progress, send: {
+                    .changeProgress($0)
+                }), in: 0...viewStore.state.stepCount)
+                    .tint(.white)
+                    .padding(.horizontal)
+                Button(action: {
+                    viewStore.send(.saveButtonTapped)
+                }, label: {
+                    Text("Speichern")
+                        .padding()
+                        .foregroundStyle(.black)
+                        .background(.white)
+                        .cornerRadius(30)
+                })
             }
             .padding()
             .onDisappear {

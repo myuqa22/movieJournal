@@ -15,6 +15,11 @@ struct MovieDto: Codable {
     let release_date: String
     let vote_average: Double
     
+    let genre_ids: [Int]
+}
+
+extension MovieDto {
+    
     var movieObject: MovieObject {
         let movie = MovieObject()
         movie.id = self.id
@@ -23,6 +28,7 @@ struct MovieDto: Codable {
         movie.rating = vote_average
         movie.overview = overview
         movie.release = release_date
+        movie.genre_ids.append(objectsIn: genre_ids)
         
         return movie
     }

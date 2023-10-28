@@ -36,8 +36,10 @@ struct MovieRating: Reducer {
         case binding(BindingAction<State>)
         case changeProgress(Double)
         case saveCustomRating(Double)
+        case saveButtonTapped
     }
     
+    @Dependency(\.dismiss) var dismiss
     var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -48,6 +50,8 @@ struct MovieRating: Reducer {
                 state.progress = .minimum(newProgress, state.stepCount)
                 return .none
             case .saveCustomRating:
+                return .none
+            case .saveButtonTapped:
                 return .none
             }
         }
