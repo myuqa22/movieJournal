@@ -48,7 +48,10 @@ struct Search: Reducer {
         BindingReducer()
         Reduce { state, action in
             switch action {
-                
+            case .binding(_):
+                return .none
+            case .changeSearchInput(_):
+                return .none
             }
         }
         

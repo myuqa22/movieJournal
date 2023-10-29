@@ -28,6 +28,9 @@ struct SeenView: View {
                     }
                 }
             }
+            .toolbar {
+              ToolbarItem(placement: .principal) { Color.clear }
+            }
             .padding(.horizontal)
             .navigationTitle("Gesehen")
             .onAppear {

@@ -47,6 +47,9 @@ struct DashboardView: View {
                     .onAppear {
                         viewStore.send(.fetchGenreMovies)
                     }
+                    .toolbar {
+                      ToolbarItem(placement: .principal) { Color.clear }
+                    }
                 }
             }
         } destination: { path in
@@ -77,6 +80,7 @@ struct DashboardView: View {
                 )
             }
         }
+        .accentColor(.white)
     }
     
     struct UpperView: View {

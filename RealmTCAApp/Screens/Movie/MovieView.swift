@@ -47,6 +47,9 @@ struct MovieView: View {
                     viewStore.send(.loadOrCreateAdditional)
                 }
             }
+            .toolbar {
+              ToolbarItem(placement: .principal) { Color.clear }
+            }
             .sheet(
                 isPresented: viewStore.binding(
                     get: \.isSheetPresented,

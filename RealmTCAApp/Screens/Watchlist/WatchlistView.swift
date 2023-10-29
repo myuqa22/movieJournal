@@ -27,6 +27,9 @@ struct WatchlistView: View {
                     }
                 }
             }
+            .toolbar {
+              ToolbarItem(placement: .principal) { Color.clear }
+            }
             .padding(.horizontal)
             .onAppear {
                 viewStore.send(.loadAdditional)
