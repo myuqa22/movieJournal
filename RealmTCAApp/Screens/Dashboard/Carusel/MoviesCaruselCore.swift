@@ -34,6 +34,7 @@ struct MoviesCarusel: Reducer {
         
         let category: MovieSourceCategoryType
         var movies: IdentifiedArrayOf<MovieModel> = []
+        var genres: IdentifiedArrayOf<GenreModel> = []
     }
     
     enum Action {
@@ -44,6 +45,9 @@ struct MoviesCarusel: Reducer {
         case moviesResponse(TaskResult<MoviesDto>)
         case getMoviesFromDatabase
         case updateMovie([MovieModel])
+        
+        case getMovieGenresFromDatabase
+        case updateGenre([GenreModel])
         
         case gotToMovie(MovieModel)
     }
@@ -113,6 +117,16 @@ struct MoviesCarusel: Reducer {
                 return .none
             case let .showError(appError):
                 print(appError)
+                return .none
+            case .getMovieGenresFromDatabase:
+                return environment.realm
+                    .fetch(GenreObject.self)
+                    .map { results in
+                        let genres = Array(results.map { $0.genre } )
+                        return .updateGenre(genres)
+                    }
+            case let .updateGenre(genres):
+                state.genres = IdentifiedArray(uniqueElements: genres)
                 return .none
             }
         }

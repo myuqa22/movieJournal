@@ -38,4 +38,12 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
         return movie
     }
     
+    var releaseDate: Date? {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        
+        return formatter.date(from: release_date)
+    }
+    
 }
