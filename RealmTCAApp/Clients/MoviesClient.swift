@@ -15,6 +15,7 @@ struct MoviesClient {
     var topRatedMovies:  @Sendable () async throws -> MoviesDto
     var nowPlayingMovies: @Sendable () async throws -> MoviesDto
     var genreMovies: @Sendable () async throws -> GenresDto
+    var searchMovies: @Sendable (_ keyword: String) async throws -> MoviesDto
     
 }
 
@@ -34,7 +35,7 @@ extension MoviesClient: DependencyKey {
     
     static let liveValue = Self(
         popularMovies: {
-            try await Task.sleep(for: .seconds(1))
+            try await Task.sleep(for: .seconds(0.5))
             
             var url = URL(string: "https://api.themoviedb.org/3/discover/movie?language=de-GER")!
         
@@ -47,7 +48,7 @@ extension MoviesClient: DependencyKey {
             
             return decoded
         }, topRatedMovies: {
-            try await Task.sleep(for: .seconds(1))
+            try await Task.sleep(for: .seconds(0.5))
             
             var url = URL(string: "https://api.themoviedb.org/3/movie/top_rated?language=de-GER")!
         
@@ -61,7 +62,7 @@ extension MoviesClient: DependencyKey {
             return decoded
             
         }, nowPlayingMovies: {
-            try await Task.sleep(for: .seconds(1))
+            try await Task.sleep(for: .seconds(0.5))
             
             var url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=de-GER")!
         
@@ -74,7 +75,7 @@ extension MoviesClient: DependencyKey {
             
             return decoded
         }, genreMovies: {
-            try await Task.sleep(for: .seconds(1))
+            try await Task.sleep(for: .seconds(0.5))
             
             var url = URL(string: "https://api.themoviedb.org/3/genre/movie/list?language=de")!
         
@@ -86,8 +87,20 @@ extension MoviesClient: DependencyKey {
             let decoded = try JSONDecoder().decode(GenresDto.self, from: data)
             
             return decoded
-        }
-    )
+        }, searchMovies: { keyword in
+            try await Task.sleep(for: .seconds(0.5))
+            
+            var url = URL(string: "https://api.themoviedb.org/3/search/movie?language=de-GER&include_adult=true&query=\(keyword)")!
+            
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
+            
+            let (data, _) = try await URLSession.shared
+                .data(for: request)
+            let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
+            
+            return decoded
+        })
 
     /// This is the "unimplemented" fact dependency that is useful to plug into tests that you want
     /// to prove do not need the dependency.
@@ -96,7 +109,8 @@ extension MoviesClient: DependencyKey {
         popularMovies: unimplemented("\(Self.self).popularMovies"),
         topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
         nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies"),
-        genreMovies: unimplemented("\(Self.self).genreMovies")
+        genreMovies: unimplemented("\(Self.self).genreMovies"),
+        searchMovies: unimplemented("\(Self.self).searchMovies")
     )
     
 }

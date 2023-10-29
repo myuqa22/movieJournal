@@ -19,7 +19,7 @@ class MovieObject: Object {
     @Persisted(primaryKey: true) var id: Int
     @Persisted var title: String
     @Persisted var rating: Double
-    @Persisted var image: String
+    @Persisted var image: String?
     @Persisted var overview: String
     @Persisted var release: String
     @Persisted var genre_ids: List<Int>

@@ -48,6 +48,7 @@ struct Dashboard: Reducer {
         
         case goToSeen
         case goToWatchlist
+        case goToSearch
         case gotToMovie(MovieModel)
         case path(StackAction<Path.State, Path.Action>)
         
@@ -107,6 +108,9 @@ struct Dashboard: Reducer {
                 return .none
             case .goToWatchlist:
                 state.path.append(.watchlist(.init()))
+                return .none
+            case .goToSearch:
+                state.path.append(.search(.init()))
                 return .none
             case let .gotToMovie(movieModel):
                 state.path.append(.movie(.init(movie: movieModel)))

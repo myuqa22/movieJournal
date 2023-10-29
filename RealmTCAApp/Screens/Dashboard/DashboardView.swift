@@ -78,6 +78,10 @@ struct DashboardView: View {
                      action: Dashboard.Path.Action.watchlist,
                      then: WatchlistView.init(store:)
                 )
+            case .search:
+                CaseLet(/Dashboard.Path.State.search,
+                         action: Dashboard.Path.Action.search,
+                         then: SearchView.init(store:))
             }
         }
         .accentColor(.white)
@@ -120,7 +124,7 @@ struct DashboardView: View {
                 })
                 .frame(maxWidth: .infinity)
                 Button(action: {
-                    
+                    viewStore.send(.goToSearch)
                 }, label: {
                     Image(systemName: "magnifyingglass")
                         .font(.body)
@@ -129,9 +133,7 @@ struct DashboardView: View {
                         .tint(.black)
                         .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10.0))
-                        
                 })
-                
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 20)

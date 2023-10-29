@@ -79,7 +79,7 @@ struct MovieView: View {
                 Spacer()
                 VStack {
                     VStack {
-                        Text("\(viewStore.state.movie.id)")
+                        Text(verbatim: "\(viewStore.state.movie.id)")
                         CircularProgressView(progress: viewStore.state.movie.rating, maxProgress: Constants.maxRating)
                             .overlay {
                                 Text(String(format: "%.1f", viewStore.state.movie.rating))

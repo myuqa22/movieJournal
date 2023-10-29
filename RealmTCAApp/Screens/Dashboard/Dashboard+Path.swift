@@ -19,6 +19,7 @@ extension Dashboard {
             case seen(Seen.State = .init())
             case watchlist(Watchlist.State = .init())
             case movie(Movie.State)
+            case search(Search.State = .init())
         }
         
         enum Action {
@@ -27,6 +28,7 @@ extension Dashboard {
             case seen(Seen.Action)
             case watchlist(Watchlist.Action)
             case movie(Movie.Action)
+            case search(Search.Action)
         }
         
         var body: some Reducer<State, Action> {
@@ -42,6 +44,9 @@ extension Dashboard {
             }
             Scope(state: /State.movie, action: /Action.movie) {
                 Movie()
+            }
+            Scope(state: /State.search, action: /Action.search) {
+                Search()
             }
         }
     }

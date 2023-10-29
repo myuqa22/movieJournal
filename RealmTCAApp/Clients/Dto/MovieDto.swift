@@ -12,7 +12,7 @@ struct MovieDto: Codable {
     let id: Int
     let title: String
     let overview: String
-    let poster_path: String
+    let poster_path: String?
     let release_date: String
     let vote_average: Double
     
@@ -35,4 +35,16 @@ extension MovieDto {
         
         return movie
     }
+    
+    var movieModel: MovieModel {
+        
+        MovieModel(id: id,
+                   title: title,
+                   image: poster_path,
+                   rating: vote_average,
+                   overview: overview,
+                   release_date: release_date,
+                   genre_ids: genre_ids)
+    }
+    
 }

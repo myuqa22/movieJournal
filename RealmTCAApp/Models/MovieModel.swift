@@ -13,15 +13,18 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
     
     let id: Int
     let title: String
-    let image: String
+    let image: String?
     let rating: Double
     let overview: String
     let release_date: String
     let genre_ids: [Int]
     
-    var imageUrl: URL {
+    var imageUrl: URL? {
         
-        URL(string: "https://image.tmdb.org/t/p/w500" + image)!
+        guard let image = movieObject.image else {
+            return nil
+        }
+        return URL(string: "https://image.tmdb.org/t/p/w500" + image)
     }
     
     var movieObject: MovieObject {

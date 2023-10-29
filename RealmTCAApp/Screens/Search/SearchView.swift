@@ -7,34 +7,58 @@
 
 import SwiftUI
 
+import ComposableArchitecture
+
 struct SearchView: View {
     
-    @State var searchableString: String = String()
+    let store: StoreOf<Search>
     
     var body: some View {
-        List {
-//            ForEach(1..<99) { num in
-//                Text("Hallo \(num)")
-//            }
-            HStack {
-                Spacer()
-                Text("Über das Suchfeld können nach Filmen gesucht werden 🎬")
+        
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            List {
+                if viewStore.searchResults.isEmpty {
+                    HStack {
+                        Spacer()
+                        if viewStore.searchInput.isEmpty {
+                            Text("Über das Suchfeld können nach Filmen gesucht werden 🎬")
+                        } else {
+                            Text("Keine Ergebnisse")
+                        }
+                        Spacer()
+                    }
                     .multilineTextAlignment(.center)
-                Spacer()
-            }.frame(height: 200)
-        }
-        .listStyle(.plain)
-        .navigationTitle("Suche")
-        .searchable(text: $searchableString)
-        .onSubmit(of: .search) {
-            print(searchableString)
+                    .frame(height: 200)
+                } else {
+                    ForEach(viewStore.searchResults) { movie in
+                        Text(movie.title)
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .navigationTitle("Filme suchen")
+            .searchable(
+                text: viewStore.binding(
+                    get: \.searchInput,
+                    send: {
+                        .updateSearchQuery($0)
+                    }),
+                placement: .navigationBarDrawer(displayMode: .always))
+            .onSubmit(of: .search) {
+                viewStore.send(.searchMovies)
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) { Color.clear }
+            }
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        SearchView()
+        SearchView(store: Store(initialState: Search.State.init(), reducer: {
+            Search()
+        }))
     }
     
 }

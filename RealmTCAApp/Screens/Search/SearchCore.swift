@@ -32,28 +32,49 @@ struct Search: Reducer {
     
     struct State: Equatable, Codable, Hashable {
         
-        @BindingState var searchInput: String
+        @BindingState var searchInput: String = String()
+        var searchResults = IdentifiedArrayOf<MovieModel>()
     }
     
-    enum Action: BindableAction, Equatable {
+    enum Action: BindableAction {
         
         case binding(BindingAction<State>)
-        case changeSearchInput(String)
+        case updateSearchQuery(String)
+        
+        case searchMovies
+        case searchMoviesResponse(TaskResult<MoviesDto>)
+        case updateSearchMovies([MovieModel])
     }
     
-    @Dependency(\.dismiss) var dismiss
+    @Dependency(\.moviesClient) var movieClient
     
     var body: some Reducer<State, Action> {
         
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(_):
+            case .binding:
                 return .none
-            case .changeSearchInput(_):
+            case .searchMovies:
+                return .run { [state = state] send in
+                    await send(.searchMoviesResponse(.init {
+                        try await self.movieClient.searchMovies(state.searchInput)
+                    }))
+                }
+            case let .updateSearchQuery(keyword):
+                state.searchInput = keyword
+                return .none
+            case let .searchMoviesResponse(.success(dto)):
+                return .run { send in
+                    await send(.updateSearchMovies(Array(dto.results.map { $0.movieModel })))
+                }
+            case let .searchMoviesResponse(.failure(error)):
+                print(error)
+                return .none
+            case let .updateSearchMovies(searchResults):
+                state.searchResults = IdentifiedArray(uniqueElements: searchResults)
                 return .none
             }
         }
-        
     }
 }
