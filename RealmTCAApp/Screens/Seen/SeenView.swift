@@ -23,18 +23,24 @@ struct SeenView: View {
                         Button(action: {
                             viewStore.send(.detailMovieButtonTapped(movie))
                         }, label: {
-                            MovieCellView(movie: movie)
+                            if let firstGenreId = movie.genre_ids.first,
+                               let genre = viewStore.state.genres.first(where: { $0.id == firstGenreId }) {
+                                MovieCellView(movie: movie, genre: genre)
+                            } else {
+                                MovieCellView(movie: movie, genre: nil)
+                            }
                         })
                     }
                 }
             }
             .toolbar {
-              ToolbarItem(placement: .principal) { Color.clear }
+                ToolbarItem(placement: .principal) { Color.clear }
             }
             .padding(.horizontal)
             .navigationTitle("Gesehen")
             .onAppear {
                 viewStore.send(.loadData)
+                viewStore.send(.loadGenres)
             }
         }
     }

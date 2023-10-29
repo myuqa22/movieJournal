@@ -49,4 +49,8 @@ struct MovieModel: Equatable, Identifiable, Hashable, Codable {
         return formatter.date(from: release_date)
     }
     
+    var year: Int? {
+        releaseDate?.get(.year)
+    }
+    
 }

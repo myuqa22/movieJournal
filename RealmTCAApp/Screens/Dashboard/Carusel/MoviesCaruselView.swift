@@ -67,10 +67,9 @@ struct MoviesCaruselView: View {
                                         Text("·")
                                             .fontWeight(.bold)
                                     }
-                                    if let movieReleaseDate = movie.releaseDate {
-                                        Text(verbatim: "\(movieReleaseDate.get(.year))")
+                                    if let year = movie.year {
+                                        Text(verbatim: "\(year)")
                                     }
-                                   
                                     Spacer()
                                 }
                                 .modifier(MovieCaption())

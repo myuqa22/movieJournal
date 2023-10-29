@@ -33,6 +33,7 @@ struct Seen: Reducer {
     
         var movies: IdentifiedArrayOf<MovieModel> = []
         var additional: IdentifiedArrayOf<MovieAdditionalModel> = []
+        var genres: IdentifiedArrayOf<GenreModel> = []
     }
     
     enum Action: Equatable, Sendable {
@@ -43,6 +44,9 @@ struct Seen: Reducer {
         case updateMovies([MovieModel])
         case path(StackAction<Movie.State, Movie.Action>)
         case detailMovieButtonTapped(MovieModel)
+        
+        case loadGenres
+        case updateGenres([GenreModel])
     }
     
     var body: some Reducer<State, Action> {
@@ -75,6 +79,16 @@ struct Seen: Reducer {
             case .path:
                 return .none
             case .detailMovieButtonTapped:
+                return .none
+            case .loadGenres:
+                return environment.realm
+                    .fetch(GenreObject.self)
+                    .map { results in
+                        let genres = Array(results.map { $0.genre } )
+                        return .updateGenres(genres)
+                    }
+            case let .updateGenres(genres):
+                state.genres = IdentifiedArray(uniqueElements: genres)
                 return .none
             }
         }

@@ -31,7 +31,7 @@ struct SearchView: View {
                     .frame(height: 200)
                 } else {
                     ForEach(viewStore.searchResults) { movie in
-                        Text(movie.title)
+                        MovieCellView(movie: movie, genre: nil)
                     }
                 }
             }
@@ -52,6 +52,7 @@ struct SearchView: View {
             }
         }
     }
+    
 }
 
 #Preview {

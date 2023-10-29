@@ -22,7 +22,12 @@ struct WatchlistView: View {
                         Button(action: {
                             viewStore.send(.detailMovieButtonTapped(movie))
                         }, label: {
-                            MovieCellView(movie: movie)
+                            if let firstGenreId = movie.genre_ids.first,
+                               let genre = viewStore.state.genres.first(where: { $0.id == firstGenreId }) {
+                                MovieCellView(movie: movie, genre: genre)
+                            } else {
+                                MovieCellView(movie: movie, genre: nil)
+                            }
                         })
                     }
                 }
@@ -33,6 +38,7 @@ struct WatchlistView: View {
             .padding(.horizontal)
             .onAppear {
                 viewStore.send(.loadAdditional)
+                viewStore.send(.loadGenres)
             }
             .navigationTitle("Watchlist")
         }
