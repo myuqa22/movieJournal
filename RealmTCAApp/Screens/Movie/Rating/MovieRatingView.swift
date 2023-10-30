@@ -33,7 +33,7 @@ struct MovieRatingView: View {
                                         send: {
                                             .changeProgress(Double($0))
                                         }),
-                                      formatter: Constants.oneMaximumFractionDigitsFormatter)
+                                      formatter: Formatter.oneMaximumFractionDigits)
                             .font(.title)
                             .fontWeight(.semibold)
                             .multilineTextAlignment(.center)

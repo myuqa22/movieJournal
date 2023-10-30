@@ -17,7 +17,7 @@ struct MovieView: View {
         
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                VStack {
+                VStack(spacing: 20) {
                     Text(viewStore.movie.title)
                         .font(.largeTitle)
                     UpperView(viewStore: viewStore)
@@ -29,10 +29,24 @@ struct MovieView: View {
                             }
                         }
                     }
+                    .scrollIndicators(.hidden)
                     .onAppear {
                         viewStore.send(.loadGenres)
                     }
-                    Text(viewStore.movie.overview)
+                    
+                    if !viewStore.movie.overview.isEmpty {
+                        Text("Beschreibung")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        Text(viewStore.movie.overview)
+                    }
+                    
+                    if let releaseDate = viewStore.movie.releaseDate {
+                        Text("Veröffentlicht am \(Formatter.dateMediumString.string(from: releaseDate))")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
                     Spacer()
                 }
                 .padding(.horizontal)

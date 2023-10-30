@@ -25,17 +25,17 @@ final class SeenCoreTests: XCTestCase {
     func testSuccessfullyLoadMovie() async throws {
        
         let realm = try await Realm()
-        let uuid = UUID()
+        let id = 1
         
         let additionalMovieObject = MovieAdditionalObject()
-        additionalMovieObject.id = uuid
+        additionalMovieObject.id = id
         additionalMovieObject.customDescription = "customDescription"
         additionalMovieObject.customRating = 5
         additionalMovieObject.bookmarked = true
         additionalMovieObject.seen = true
         
         let movieObject = MovieObject()
-        movieObject.id = uuid
+        movieObject.id = id
         movieObject.title = "title"
         
         try! realm.write {
@@ -62,17 +62,17 @@ final class SeenCoreTests: XCTestCase {
     func testNoSeenMovies() async throws {
        
         let realm = try await Realm()
-        let uuid = UUID()
+        let id = 1
         
         let additionalMovieObject = MovieAdditionalObject()
-        additionalMovieObject.id = uuid
+        additionalMovieObject.id = id
         additionalMovieObject.customDescription = "customDescription"
         additionalMovieObject.customRating = 5
         additionalMovieObject.bookmarked = true
         additionalMovieObject.seen = false
         
         let movieObject = MovieObject()
-        movieObject.id = uuid
+        movieObject.id = id
         movieObject.title = "title"
         
         try! realm.write {
