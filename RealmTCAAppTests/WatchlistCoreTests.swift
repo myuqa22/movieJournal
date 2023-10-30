@@ -14,17 +14,16 @@ import RealmSwift
 
 @MainActor
 final class WatchlistCoreTests: XCTestCase {
-
-    override class func setUp() {
+    
+    override func setUp() {
         
         super.setUp()
-        
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = String(describing: self)
     }
 
-    func testSuccessfullyLoadMovie() async throws {
+    func testSuccessfullyLoadMovie() async {
        
-        let realm = try await Realm()
+        let realm = try! await Realm()
         
         let id = 1
         let additionalMovieObject = MovieAdditionalObject()
@@ -49,7 +48,7 @@ final class WatchlistCoreTests: XCTestCase {
             $0.continuousClock = ImmediateClock()
         }
         
-        await store.send(.loadAdditional)
+        await store.send(.loadBookmarkedAdditional)
         await store.receive(.updateAdditional([additionalMovieObject.movieAdditional]), timeout: 1) { state in
             state.additional = [additionalMovieObject.movieAdditional]
         }
@@ -68,9 +67,9 @@ final class WatchlistCoreTests: XCTestCase {
         }
     }
     
-    func testNoWatchlistMovies() async throws {
+    func testNoWatchlistMovies() async {
        
-        let realm = try await Realm()
+        let realm = try! await Realm()
         
         let id = 1
         let additionalMovieObject = MovieAdditionalObject()
@@ -95,11 +94,594 @@ final class WatchlistCoreTests: XCTestCase {
             $0.continuousClock = ImmediateClock()
         }
         
-        await store.send(.loadAdditional)
+        await store.send(.loadBookmarkedAdditional)
         await store.receive(.updateAdditional([]), timeout: 1)
         await store.receive(.loadMovies, timeout: 1)
         await store.receive(.updateMovies([]), timeout: 1)
         await store.receive(.sortMovies(nil), timeout: 1)
     }
+    
+    func testSeenMoviesMissingMovieModel() async {
+       
+        let realm = try! await Realm()
+        
+        let id = 1
+        
+        let additionalMovieObject = MovieAdditionalObject()
+        additionalMovieObject.id = id
+        additionalMovieObject.customDescription = "customDescription"
+        additionalMovieObject.customRating = 5
+        additionalMovieObject.bookmarked = true
+        additionalMovieObject.seen = false
+        
+        try! realm.write {
+            realm.add(additionalMovieObject)
+        }
+        
+        let store = TestStore(initialState: Watchlist.State()) {
+            Watchlist()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        await store.send(.loadBookmarkedAdditional)
+        await store.receive(.updateAdditional([additionalMovieObject.movieAdditional]), timeout: 1) { state in
+            state.additional = [additionalMovieObject.movieAdditional]
+        }
+        await store.receive(.loadMovies, timeout: 1)
+        await store.receive(.updateMovies([]), timeout: 1)
+        await store.receive(.sortMovies(nil), timeout: 1)
+    }
+    
+    func testSortAlphabet() async {
+        
+        let realm = try! await Realm()
+        
+        let idA = 1
+        let additionalA = MovieAdditionalObject()
+        additionalA.id = idA
+        additionalA.customDescription = "customDescription"
+        additionalA.customRating = 1
+        additionalA.bookmarked = true
+        additionalA.seen = false
+        let movieA = MovieObject()
+        movieA.id = idA
+        movieA.title = "A"
+        movieA.release = "2020-03-01"
+        
+        let idB = 2
+        let additionalB = MovieAdditionalObject()
+        additionalB.id = idB
+        additionalB.customDescription = "customDescription"
+        additionalB.customRating = 2
+        additionalB.bookmarked = true
+        additionalB.seen = false
+        let movieB = MovieObject()
+        movieB.id = idB
+        movieB.title = "B"
+        movieB.rating = 2
+        movieB.release = "2020-03-02"
+        
+        let idC = 3
+        let additionalC = MovieAdditionalObject()
+        additionalC.id = idC
+        additionalC.customDescription = "customDescription"
+        additionalC.customRating = 3
+        additionalC.bookmarked = true
+        additionalC.seen = false
+        let movieC = MovieObject()
+        movieC.id = idC
+        movieC.title = "C"
+        movieC.rating = 3
+        movieC.release = "2020-03-03"
+        
+        let idD = 4
+        let additionalD = MovieAdditionalObject()
+        additionalD.id = idD
+        additionalD.customDescription = "customDescription"
+        additionalD.customRating = 4
+        additionalD.bookmarked = false
+        additionalD.seen = true
+        let movieD = MovieObject()
+        movieD.id = idD
+        movieD.title = "C"
+        movieD.rating = 4
+        movieD.release = "2020-03-04"
+        
+        
+        try! realm.write {
+            realm.add(additionalA)
+            realm.add(movieA)
+            
+            realm.add(additionalB)
+            realm.add(movieB)
+            
+            realm.add(additionalC)
+            realm.add(movieC)
+            
+            realm.add(additionalD)
+            realm.add(movieD)
+        }
+        
+        let store = TestStore(initialState: Watchlist.State()) {
+            Watchlist()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        
+        
+        await store.send(.loadBookmarkedAdditional)
+        let movieAdditionalFromDatabase: IdentifiedArrayOf = [
+            additionalA.movieAdditional,
+            additionalB.movieAdditional,
+            additionalC.movieAdditional
+        ]
+        await store.receive(.updateAdditional(Array(movieAdditionalFromDatabase)), timeout: 1) { state in
+            state.additional = movieAdditionalFromDatabase
+        }
+        await store.receive(.loadMovies, timeout: 1)
+        
+        let moviesFromDatabase = [
+            movieA.movie,
+            movieB.movie,
+            movieC.movie,
+        ]
+        
+        var movieAWrapper = additionalA.movieAdditional
+        movieAWrapper.movie = movieA.movie
+        
+        var movieBWrapper = additionalB.movieAdditional
+        movieBWrapper.movie = movieB.movie
+        
+        var movieCWrapper = additionalC.movieAdditional
+        movieCWrapper.movie = movieC.movie
+        
+        await store.receive(.updateMovies(moviesFromDatabase), timeout: 1) { state in
+            state.additional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.receive(.sortMovies(nil), timeout: 1) { state in
+            state.sortBy = .alphabeticallyAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.alphabeticallyDecending)) { state in
+            state.sortBy = .alphabeticallyDecending
+            state.sortedAdditional = [
+                movieCWrapper,
+                movieBWrapper,
+                movieAWrapper
+            ]
+        }
+    }
+    
+    func testSortCustomRating() async {
+        
+        let realm = try! await Realm()
+        
+        let idA = 1
+        let additionalA = MovieAdditionalObject()
+        additionalA.id = idA
+        additionalA.customDescription = "customDescription"
+        additionalA.customRating = 1
+        additionalA.bookmarked = true
+        additionalA.seen = false
+        let movieA = MovieObject()
+        movieA.id = idA
+        movieA.title = "A"
+        movieA.release = "2020-03-01"
+        
+        let idB = 2
+        let additionalB = MovieAdditionalObject()
+        additionalB.id = idB
+        additionalB.customDescription = "customDescription"
+        additionalB.customRating = 2
+        additionalB.bookmarked = true
+        additionalB.seen = false
+        let movieB = MovieObject()
+        movieB.id = idB
+        movieB.title = "B"
+        movieB.rating = 2
+        movieB.release = "2020-03-02"
+        
+        let idC = 3
+        let additionalC = MovieAdditionalObject()
+        additionalC.id = idC
+        additionalC.customDescription = "customDescription"
+        additionalC.customRating = 3
+        additionalC.bookmarked = true
+        additionalC.seen = false
+        let movieC = MovieObject()
+        movieC.id = idC
+        movieC.title = "C"
+        movieC.rating = 3
+        movieC.release = "2020-03-03"
+        
+        let idD = 4
+        let additionalD = MovieAdditionalObject()
+        additionalD.id = idD
+        additionalD.customDescription = "customDescription"
+        additionalD.customRating = 4
+        additionalD.bookmarked = false
+        additionalD.seen = true
+        let movieD = MovieObject()
+        movieD.id = idD
+        movieD.title = "C"
+        movieD.rating = 4
+        movieD.release = "2020-03-04"
+        
+        
+        try! realm.write {
+            realm.add(additionalA)
+            realm.add(movieA)
+            
+            realm.add(additionalB)
+            realm.add(movieB)
+            
+            realm.add(additionalC)
+            realm.add(movieC)
+            
+            realm.add(additionalD)
+            realm.add(movieD)
+        }
+        
+        let store = TestStore(initialState: Watchlist.State()) {
+            Watchlist()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        
+        
+        await store.send(.loadBookmarkedAdditional)
+        let movieAdditionalFromDatabase: IdentifiedArrayOf = [
+            additionalA.movieAdditional,
+            additionalB.movieAdditional,
+            additionalC.movieAdditional
+        ]
+        await store.receive(.updateAdditional(Array(movieAdditionalFromDatabase)), timeout: 1) { state in
+            state.additional = movieAdditionalFromDatabase
+        }
+        await store.receive(.loadMovies, timeout: 1)
+        
+        let moviesFromDatabase = [
+            movieA.movie,
+            movieB.movie,
+            movieC.movie,
+        ]
+        
+        var movieAWrapper = additionalA.movieAdditional
+        movieAWrapper.movie = movieA.movie
+        
+        var movieBWrapper = additionalB.movieAdditional
+        movieBWrapper.movie = movieB.movie
+        
+        var movieCWrapper = additionalC.movieAdditional
+        movieCWrapper.movie = movieC.movie
+        
+        await store.receive(.updateMovies(moviesFromDatabase), timeout: 1) { state in
+            state.additional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.receive(.sortMovies(nil), timeout: 1) { state in
+            state.sortBy = .alphabeticallyAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.customRatingAscendig)) { state in
+            state.sortBy = .customRatingAscendig
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.customRatingDecending)) { state in
+            state.sortBy = .customRatingDecending
+            state.sortedAdditional = [
+                movieCWrapper,
+                movieBWrapper,
+                movieAWrapper
+            ]
+        }
+    }
+    
+    func testSortRating() async {
+        
+        let realm = try! await Realm()
+        
+        let idA = 1
+        let additionalA = MovieAdditionalObject()
+        additionalA.id = idA
+        additionalA.customDescription = "customDescription"
+        additionalA.customRating = 1
+        additionalA.bookmarked = true
+        additionalA.seen = false
+        let movieA = MovieObject()
+        movieA.id = idA
+        movieA.title = "A"
+        movieA.release = "2020-03-01"
+        
+        let idB = 2
+        let additionalB = MovieAdditionalObject()
+        additionalB.id = idB
+        additionalB.customDescription = "customDescription"
+        additionalB.customRating = 2
+        additionalB.bookmarked = true
+        additionalB.seen = false
+        let movieB = MovieObject()
+        movieB.id = idB
+        movieB.title = "B"
+        movieB.rating = 2
+        movieB.release = "2020-03-02"
+        
+        let idC = 3
+        let additionalC = MovieAdditionalObject()
+        additionalC.id = idC
+        additionalC.customDescription = "customDescription"
+        additionalC.customRating = 3
+        additionalC.bookmarked = true
+        additionalC.seen = false
+        let movieC = MovieObject()
+        movieC.id = idC
+        movieC.title = "C"
+        movieC.rating = 3
+        movieC.release = "2020-03-03"
+        
+        let idD = 4
+        let additionalD = MovieAdditionalObject()
+        additionalD.id = idD
+        additionalD.customDescription = "customDescription"
+        additionalD.customRating = 4
+        additionalD.bookmarked = false
+        additionalD.seen = true
+        let movieD = MovieObject()
+        movieD.id = idD
+        movieD.title = "C"
+        movieD.rating = 4
+        movieD.release = "2020-03-04"
+        
+        
+        try! realm.write {
+            realm.add(additionalA)
+            realm.add(movieA)
+            
+            realm.add(additionalB)
+            realm.add(movieB)
+            
+            realm.add(additionalC)
+            realm.add(movieC)
+            
+            realm.add(additionalD)
+            realm.add(movieD)
+        }
+        
+        let store = TestStore(initialState: Watchlist.State()) {
+            Watchlist()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        
+        
+        await store.send(.loadBookmarkedAdditional)
+        let movieAdditionalFromDatabase: IdentifiedArrayOf = [
+            additionalA.movieAdditional,
+            additionalB.movieAdditional,
+            additionalC.movieAdditional
+        ]
+        await store.receive(.updateAdditional(Array(movieAdditionalFromDatabase)), timeout: 1) { state in
+            state.additional = movieAdditionalFromDatabase
+        }
+        await store.receive(.loadMovies, timeout: 1)
+        
+        let moviesFromDatabase = [
+            movieA.movie,
+            movieB.movie,
+            movieC.movie,
+        ]
+        
+        var movieAWrapper = additionalA.movieAdditional
+        movieAWrapper.movie = movieA.movie
+        
+        var movieBWrapper = additionalB.movieAdditional
+        movieBWrapper.movie = movieB.movie
+        
+        var movieCWrapper = additionalC.movieAdditional
+        movieCWrapper.movie = movieC.movie
+        
+        await store.receive(.updateMovies(moviesFromDatabase), timeout: 1) { state in
+            state.additional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.receive(.sortMovies(nil), timeout: 1) { state in
+            state.sortBy = .alphabeticallyAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.ratingAscending)) { state in
+            state.sortBy = .ratingAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.ratingDecending)) { state in
+            state.sortBy = .ratingDecending
+            state.sortedAdditional = [
+                movieCWrapper,
+                movieBWrapper,
+                movieAWrapper
+            ]
+        }
+    }
 
+    func testSortRelease() async {
+        
+        let realm = try! await Realm()
+        
+        let idA = 1
+        let additionalA = MovieAdditionalObject()
+        additionalA.id = idA
+        additionalA.customDescription = "customDescription"
+        additionalA.customRating = 1
+        additionalA.bookmarked = true
+        additionalA.seen = false
+        let movieA = MovieObject()
+        movieA.id = idA
+        movieA.title = "A"
+        movieA.release = "2020-03-01"
+        
+        let idB = 2
+        let additionalB = MovieAdditionalObject()
+        additionalB.id = idB
+        additionalB.customDescription = "customDescription"
+        additionalB.customRating = 2
+        additionalB.bookmarked = true
+        additionalB.seen = false
+        let movieB = MovieObject()
+        movieB.id = idB
+        movieB.title = "B"
+        movieB.rating = 2
+        movieB.release = "2020-03-02"
+        
+        let idC = 3
+        let additionalC = MovieAdditionalObject()
+        additionalC.id = idC
+        additionalC.customDescription = "customDescription"
+        additionalC.customRating = 3
+        additionalC.bookmarked = true
+        additionalC.seen = false
+        let movieC = MovieObject()
+        movieC.id = idC
+        movieC.title = "C"
+        movieC.rating = 3
+        movieC.release = "2020-03-03"
+        
+        let idD = 4
+        let additionalD = MovieAdditionalObject()
+        additionalD.id = idD
+        additionalD.customDescription = "customDescription"
+        additionalD.customRating = 4
+        additionalD.bookmarked = false
+        additionalD.seen = true
+        let movieD = MovieObject()
+        movieD.id = idD
+        movieD.title = "C"
+        movieD.rating = 4
+        movieD.release = "2020-03-04"
+        
+        
+        try! realm.write {
+            realm.add(additionalA)
+            realm.add(movieA)
+            
+            realm.add(additionalB)
+            realm.add(movieB)
+            
+            realm.add(additionalC)
+            realm.add(movieC)
+            
+            realm.add(additionalD)
+            realm.add(movieD)
+        }
+        
+        let store = TestStore(initialState: Watchlist.State()) {
+            Watchlist()
+        } withDependencies: {
+            $0.continuousClock = ImmediateClock()
+        }
+        
+        
+        
+        await store.send(.loadBookmarkedAdditional)
+        let movieAdditionalFromDatabase: IdentifiedArrayOf = [
+            additionalA.movieAdditional,
+            additionalB.movieAdditional,
+            additionalC.movieAdditional
+        ]
+        await store.receive(.updateAdditional(Array(movieAdditionalFromDatabase)), timeout: 1) { state in
+            state.additional = movieAdditionalFromDatabase
+        }
+        await store.receive(.loadMovies, timeout: 1)
+        
+        let moviesFromDatabase = [
+            movieA.movie,
+            movieB.movie,
+            movieC.movie,
+        ]
+        
+        var movieAWrapper = additionalA.movieAdditional
+        movieAWrapper.movie = movieA.movie
+        
+        var movieBWrapper = additionalB.movieAdditional
+        movieBWrapper.movie = movieB.movie
+        
+        var movieCWrapper = additionalC.movieAdditional
+        movieCWrapper.movie = movieC.movie
+        
+        await store.receive(.updateMovies(moviesFromDatabase), timeout: 1) { state in
+            state.additional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.receive(.sortMovies(nil), timeout: 1) { state in
+            state.sortBy = .alphabeticallyAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.releaseAscending)) { state in
+            state.sortBy = .releaseAscending
+            state.sortedAdditional = [
+                movieAWrapper,
+                movieBWrapper,
+                movieCWrapper
+            ]
+        }
+        
+        await store.send(.sortMovies(.releaseDecending)) { state in
+            state.sortBy = .releaseDecending
+            state.sortedAdditional = [
+                movieCWrapper,
+                movieBWrapper,
+                movieAWrapper
+            ]
+        }
+    }
+    
 }

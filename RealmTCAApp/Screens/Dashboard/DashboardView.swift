@@ -44,11 +44,6 @@ struct DashboardView: View {
                                         .animationMoviesCarusel(childAction)
                                 }))
                                 
-                                MoviesCaruselView(store: self.store.scope(state: \.documentationMoviesCarusel,
-                                                                          action: { childAction in
-                                        .documentationMoviesCarusel(childAction)
-                                }))
-                                
                                 MoviesCaruselView(store: self.store.scope(state: \.loveMoviesCarusel,
                                                                           action: { childAction in
                                         .loveMoviesCarusel(childAction)
@@ -59,7 +54,6 @@ struct DashboardView: View {
                                         .horrorMoviesCarusel(childAction)
                                 }))
                             }
-                            
                             Spacer()
                         }
                     }

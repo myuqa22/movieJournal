@@ -144,13 +144,15 @@ struct Seen: Reducer {
                 case .releaseAscending:
                     state.sortedAdditional = IdentifiedArray(
                         uniqueElements: state.additional
-                            .filter { $0.movie?.releaseDate != nil}
+                            .filter { $0.movie != nil }
+                            .filter { $0.movie?.releaseDate != nil }
                             .sorted { $0.movie!.releaseDate! < $1.movie!.releaseDate! }
                     )
                 case .releaseDecending:
                     state.sortedAdditional = IdentifiedArray(
                         uniqueElements: state.additional
-                            .filter { $0.movie?.releaseDate != nil}
+                            .filter { $0.movie != nil }
+                            .filter { $0.movie?.releaseDate != nil }
                             .sorted { $0.movie!.releaseDate! > $1.movie!.releaseDate! }
                     )
                 }

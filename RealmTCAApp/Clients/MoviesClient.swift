@@ -90,7 +90,7 @@ extension MoviesClient: DependencyKey {
         }, searchMovies: { keyword in
             try await Task.sleep(for: .seconds(0.5))
             
-            var url = URL(string: "https://api.themoviedb.org/3/search/movie?language=de-GER&include_adult=true&query=\(keyword)")!
+            var url = URL(string: "https://api.themoviedb.org/3/search/movie?language=de-GER&include_adult=false&query=\(keyword)")!
             
             var request = URLRequest(url: url)
             request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
@@ -118,13 +118,13 @@ extension MoviesClient: DependencyKey {
     /// This is the "unimplemented" fact dependency that is useful to plug into tests that you want
     /// to prove do not need the dependency.
     static let testValue = Self(
-        
-        popularMovies: unimplemented("\(Self.self).popularMovies"),
-        topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
-        nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies"),
-        genreMovies: unimplemented("\(Self.self).genreMovies"),
-        searchMovies: unimplemented("\(Self.self).searchMovies"),
-        discoverMoviesByGenre: unimplemented("\(Self.self).discoverMoviesByGenre")
+        // topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
+        popularMovies: { MoviesDto(page: .zero, results: [], total_pages: .zero, total_results: .zero) },
+        topRatedMovies:  { MoviesDto(page: .zero, results: [], total_pages: .zero, total_results: .zero) },
+        nowPlayingMovies:  { MoviesDto(page: .zero, results: [], total_pages: .zero, total_results: .zero) },
+        genreMovies: { GenresDto(genres: []) },
+        searchMovies:  { _ in MoviesDto(page: .zero, results: [], total_pages: .zero, total_results: .zero) },
+        discoverMoviesByGenre:  { _ in MoviesDto(page: .zero, results: [], total_pages: .zero, total_results: .zero) }
     )
     
 }

@@ -115,7 +115,7 @@ struct MoviesCarusel: Reducer {
                         return .updateMovie(movies)
                     }
             case let .updateMovie(movies):
-                state.movies = IdentifiedArray(uniqueElements: movies)
+                state.movies = IdentifiedArray(uniqueElements: movies.prefix(15))
                 return .none
             case .gotToMovie:
                 return .none

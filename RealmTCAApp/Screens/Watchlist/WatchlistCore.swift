@@ -40,7 +40,7 @@ struct Watchlist: Reducer {
     
     enum Action: Equatable, Sendable {
         
-        case loadAdditional
+        case loadBookmarkedAdditional
         case updateAdditional([MovieWrapperModel])
         case loadMovies
         case updateMovies([MovieModel])
@@ -57,7 +57,7 @@ struct Watchlist: Reducer {
         
         Reduce { state, action in
             switch action {
-            case .loadAdditional:
+            case .loadBookmarkedAdditional:
                 return environment.realm.fetch(MovieAdditionalObject.self)
                     .map { results -> Watchlist.Action in
                         let seenMoviesAdditional = Array(results.filter { $0.bookmarked }.map { $0.movieAdditional })
@@ -73,7 +73,7 @@ struct Watchlist: Reducer {
                 return environment.realm.fetch(MovieObject.self)
                     .map { results -> Watchlist.Action in
                         let movies = Array(results
-                            .filter{ seenIds.contains($0.id )}
+                            .filter { seenIds.contains($0.id )}
                             .map { $0.movie })
                         return .updateMovies(movies)
                     }

@@ -50,7 +50,7 @@ struct WatchlistView: View {
             }
             .padding(.horizontal)
             .onAppear {
-                viewStore.send(.loadAdditional)
+                viewStore.send(.loadBookmarkedAdditional)
                 viewStore.send(.loadGenres)
                 viewStore.send(.sortMovies())
             }

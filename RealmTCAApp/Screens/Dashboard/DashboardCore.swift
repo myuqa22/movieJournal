@@ -43,7 +43,6 @@ struct Dashboard: Reducer {
         var horrorMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 27, name: "Horor")))
         var loveMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 10749, name: "Liebensfilm")))
         var animationMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 16, name: "Animation")))
-        var documentationMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 99, name: "Dokumentation")))
     }
     
     enum Action {
@@ -63,7 +62,6 @@ struct Dashboard: Reducer {
         case horrorMoviesCarusel(MoviesCarusel.Action)
         case loveMoviesCarusel(MoviesCarusel.Action)
         case animationMoviesCarusel(MoviesCarusel.Action)
-        case documentationMoviesCarusel(MoviesCarusel.Action)
         
         case fetchGenreMovies
         case genreMoviesReponse(TaskResult<GenresDto>)
@@ -97,10 +95,6 @@ struct Dashboard: Reducer {
             MoviesCarusel()
         }
         
-        Scope(state: \.documentationMoviesCarusel, action: /Action.documentationMoviesCarusel) {
-            MoviesCarusel()
-        }
-        
         Reduce { state, action in
             
             switch action {
@@ -109,8 +103,7 @@ struct Dashboard: Reducer {
                 let .nowPlayingMoviesCarusel(movieCaruselAction),
                 let .horrorMoviesCarusel(movieCaruselAction),
                 let .loveMoviesCarusel(movieCaruselAction),
-                let .animationMoviesCarusel(movieCaruselAction),
-                let .documentationMoviesCarusel(movieCaruselAction):
+                let .animationMoviesCarusel(movieCaruselAction):
                 switch movieCaruselAction {
                 case let .gotToMovie(movieModel):
                     state.path.append(.movie(.init(movie: movieModel)))

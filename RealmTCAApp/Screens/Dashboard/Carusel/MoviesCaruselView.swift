@@ -25,18 +25,18 @@ struct MoviesCaruselView: View {
                         .fontWeight(.bold)
                         .tint(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Button(action: {}, label: {
-                        Text("Alle ansehen")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 10)
-                            .foregroundStyle(.white)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(.white, lineWidth: 1)
-                            )
-                    })
+//                    Button(action: {}, label: {
+//                        Text("Alle ansehen")
+//                            .font(.caption)
+//                            .fontWeight(.semibold)
+//                            .padding(.vertical, 5)
+//                            .padding(.horizontal, 10)
+//                            .foregroundStyle(.white)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 20)
+//                                    .stroke(.white, lineWidth: 1)
+//                            )
+//                    })
                 }
                 .padding(.vertical, 10)
                 .padding(.horizontal, 16)
