@@ -54,8 +54,18 @@ final class SeenCoreTests: XCTestCase {
             state.additional = [additionalMovieObject.movieAdditional]
         }
         await store.receive(.loadMovies, timeout: 1)
+        
+        var movieWrapper = additionalMovieObject.movieAdditional
+        movieWrapper.movie = movieObject.movie
+        
         await store.receive(.updateMovies([movieObject.movie]), timeout: 1) { state in
-            state.movies = [movieObject.movie]
+            
+            state.additional = [movieWrapper]
+        }
+        await store.receive(.sortMovies(nil), timeout: 1) { state in
+            state.sortedAdditional = [
+                movieWrapper
+            ]
         }
     }
     
@@ -90,6 +100,7 @@ final class SeenCoreTests: XCTestCase {
         await store.receive(.updateMovieAdditional([]), timeout: 1)
         await store.receive(.loadMovies, timeout: 1)
         await store.receive(.updateMovies([]), timeout: 1)
+        await store.receive(.sortMovies(nil), timeout: 1)
     }
 
 

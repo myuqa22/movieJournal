@@ -32,7 +32,7 @@ struct Seen: Reducer {
     struct State: Equatable, Hashable, Codable {
     
         var sortBy: SortType = .alphabeticallyAscending
-        fileprivate var additional: IdentifiedArrayOf<MovieWrapperModel> = []
+        var additional: IdentifiedArrayOf<MovieWrapperModel> = []
         var sortedAdditional: IdentifiedArrayOf<MovieWrapperModel> = []
         var genres: IdentifiedArrayOf<GenreModel> = []
     }
