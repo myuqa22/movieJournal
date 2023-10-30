@@ -29,9 +29,9 @@ struct SearchEnvironment {
 struct Search: Reducer {
     
     let environment = SearchEnvironment()
-    
+
     struct State: Equatable, Codable, Hashable {
-        
+    
         @BindingState var searchInput: String = String()
         var searchResults = IdentifiedArrayOf<MovieModel>()
     }
@@ -44,6 +44,8 @@ struct Search: Reducer {
         case searchMovies
         case searchMoviesResponse(TaskResult<MoviesDto>)
         case updateSearchMovies([MovieModel])
+        
+        case detailMovieButtonTapped(MovieModel)
     }
     
     @Dependency(\.moviesClient) var movieClient
@@ -73,6 +75,8 @@ struct Search: Reducer {
                 return .none
             case let .updateSearchMovies(searchResults):
                 state.searchResults = IdentifiedArray(uniqueElements: searchResults)
+                return .none
+            case .detailMovieButtonTapped:
                 return .none
             }
         }

@@ -16,29 +16,43 @@ struct WatchlistView: View {
     var body: some View {
         
         WithViewStore(self.store, observe: { $0 }) { viewStore in
+            HStack {
+                Spacer()
+                Picker("Filter", selection: viewStore.binding(get: \.sortBy, send: {.sortMovies($0)})) {
+                    ForEach(SortType.allCases) { filterType in
+                        Text(filterType.rawValue)
+                            .tag(filterType)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+            
             ScrollView {
                 VStack {
-                    ForEach(viewStore.state.movies) { movie in
-                        Button(action: {
-                            viewStore.send(.detailMovieButtonTapped(movie))
-                        }, label: {
-                            if let firstGenreId = movie.genre_ids.first,
-                               let genre = viewStore.state.genres.first(where: { $0.id == firstGenreId }) {
-                                MovieCellView(movie: movie, genre: genre)
-                            } else {
-                                MovieCellView(movie: movie, genre: nil)
-                            }
-                        })
+                    ForEach(viewStore.state.sortedAdditional) { additional in
+                        if let movie = additional.movie {
+                            Button(action: {
+                                viewStore.send(.detailMovieButtonTapped(movie))
+                            }, label: {
+                                if let firstGenreId = movie.genre_ids.first,
+                                   let genre = viewStore.state.genres.first(where: { $0.id == firstGenreId }) {
+                                    MovieCellView(movie: movie, genre: genre)
+                                } else {
+                                    MovieCellView(movie: movie, genre: nil)
+                                }
+                            })
+                        }
                     }
                 }
             }
             .toolbar {
-              ToolbarItem(placement: .principal) { Color.clear }
+                ToolbarItem(placement: .principal) { Color.clear }
             }
             .padding(.horizontal)
             .onAppear {
                 viewStore.send(.loadAdditional)
                 viewStore.send(.loadGenres)
+                viewStore.send(.sortMovies())
             }
             .navigationTitle("Watchlist")
         }

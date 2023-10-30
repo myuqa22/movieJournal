@@ -16,6 +16,8 @@ struct MovieAdditionalModel: Equatable, Identifiable, Hashable, Codable {
     var customDescription: String
     var customRating: Double
     
+    var movie: MovieModel?
+    
     var movieAdditionalObject: MovieAdditionalObject {
         
         let movieAdditional = MovieAdditionalObject()

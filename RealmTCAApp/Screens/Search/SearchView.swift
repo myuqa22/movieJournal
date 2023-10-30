@@ -32,6 +32,9 @@ struct SearchView: View {
                 } else {
                     ForEach(viewStore.searchResults) { movie in
                         MovieCellView(movie: movie, genre: nil)
+                            .onTapGesture {
+                                viewStore.send(.detailMovieButtonTapped(movie))
+                            }
                     }
                 }
             }

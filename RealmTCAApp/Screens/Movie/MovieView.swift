@@ -45,6 +45,7 @@ struct MovieView: View {
                     if let releaseDate = viewStore.movie.releaseDate {
                         Text("Veröffentlicht am \(Formatter.dateMediumString.string(from: releaseDate))")
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .fontWeight(.semibold)
                     }
                     
                     Spacer()

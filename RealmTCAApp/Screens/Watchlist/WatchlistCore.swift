@@ -15,12 +15,15 @@ struct WatchlistEnvironment {
     let realm: Realm
     
     init() {
+        
         self.realm = try! Realm()
     }
     
     init(realm: Realm) {
+        
         self.realm = realm
     }
+    
 }
 
 struct Watchlist: Reducer {
@@ -28,9 +31,11 @@ struct Watchlist: Reducer {
     let environment = WatchlistEnvironment()
     
     struct State: Equatable, Hashable, Codable {
-    
-        var movies: IdentifiedArrayOf<MovieModel> = []
+
+        var sortBy: SortType = .alphabeticallyAscending
+//        var movies: IdentifiedArrayOf<MovieModel> = []
         var additional: IdentifiedArrayOf<MovieAdditionalModel> = []
+        var sortedAdditional: IdentifiedArrayOf<MovieAdditionalModel> = []
         var genres: IdentifiedArrayOf<GenreModel> = []
     }
     
@@ -42,9 +47,9 @@ struct Watchlist: Reducer {
         case updateMovies([MovieModel])
         case path(StackAction<Movie.State, Movie.Action>)
         case detailMovieButtonTapped(MovieModel)
-        
         case loadGenres
         case updateGenres([GenreModel])
+        case sortMovies(SortType? = nil)
     }
     
     @Dependency(\.dismiss) var dismiss
@@ -73,9 +78,20 @@ struct Watchlist: Reducer {
                             .map { $0.movie })
                         return .updateMovies(movies)
                     }
-            case let .updateMovies(movies):
-                state.movies = IdentifiedArray(uniqueElements: movies)
-                return .none
+            case var .updateMovies(movies):
+                var removeMissingMovieIds = Set<Int>()
+                for index in state.additional.indices {
+                    if let movieIndex = movies.firstIndex(where: { $0.id == state.additional[index].id }) {
+                        state.additional[index].movie = movies.remove(at: movieIndex)
+                    } else {
+                        removeMissingMovieIds.insert(index)
+                    }
+                }
+                
+                state.additional.removeAll(where: { removeMissingMovieIds.contains($0.id)})
+                return .run { send in
+                    await send(.sortMovies())
+                }
             case .path:
                 return .none
             case .detailMovieButtonTapped:
@@ -90,7 +106,61 @@ struct Watchlist: Reducer {
             case let .updateGenres(genres):
                 state.genres = IdentifiedArray(uniqueElements: genres)
                 return .none
+            case let .sortMovies(filterType):
+                state.sortBy = filterType ?? .alphabeticallyAscending
+                switch state.sortBy {
+                case .alphabeticallyAscending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.movie!.title < $1.movie!.title }
+                    )
+                case .alphabeticallyDecending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.movie!.title > $1.movie!.title }
+                    )
+                case .ratingAscending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.movie!.rating < $1.movie!.rating }
+                    )
+                case .ratingDecending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.movie!.rating > $1.movie!.rating }
+                    )
+                case .customRatingAscendig:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.customRating < $1.customRating }
+                    )
+                case .customRatingDecending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie != nil }
+                            .sorted { $0.customRating > $1.customRating }
+                    )
+                case .releaseAscending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie?.releaseDate != nil}
+                            .sorted { $0.movie!.releaseDate! < $1.movie!.releaseDate! }
+                    )
+                case .releaseDecending:
+                    state.sortedAdditional = IdentifiedArray(
+                        uniqueElements: state.additional
+                            .filter { $0.movie?.releaseDate != nil}
+                            .sorted { $0.movie!.releaseDate! > $1.movie!.releaseDate! }
+                    )
+                }
+                return .none
             }
         }
     }
+    
 }

@@ -12,6 +12,8 @@ struct MovieCellView: View {
     let movie: MovieModel
     let genre: GenreModel?
     
+    let cellHeight = Constants.movieCellHeigth
+    
     var body: some View {
         HStack {
             AsyncImage(url: movie.imageUrl) { image in
@@ -19,12 +21,13 @@ struct MovieCellView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }
-            .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+            .frame(height: cellHeight)
             VStack {
                 Text(movie.title)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
                     if let genreName = genre?.name {
@@ -38,7 +41,7 @@ struct MovieCellView: View {
                 }
                 .modifier(MovieCaption())
             }
-            .frame(height: 100)
+            .frame(height: cellHeight)
             Spacer()
             Text(String(format: "%.1f", movie.rating))
                 .font(.body)
