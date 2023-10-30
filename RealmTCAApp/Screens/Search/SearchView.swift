@@ -30,10 +30,10 @@ struct SearchView: View {
                     .multilineTextAlignment(.center)
                     .frame(height: 200)
                 } else {
-                    ForEach(viewStore.searchResults) { movie in
-                        MovieCellView(movie: movie, genre: nil)
+                    ForEach(viewStore.mappedSearchResults) { wrapper in
+                        MovieCellView(movieWrapper: wrapper, genre: nil)
                             .onTapGesture {
-                                viewStore.send(.detailMovieButtonTapped(movie))
+                                viewStore.send(.detailMovieButtonTapped(wrapper.movie!))
                             }
                     }
                 }
@@ -52,6 +52,9 @@ struct SearchView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) { Color.clear }
+            }
+            .onAppear {
+                viewStore.send(.loadAdditional)
             }
         }
     }

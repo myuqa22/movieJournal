@@ -187,7 +187,7 @@ struct MovieView: View {
                                   overview: "abc",
                                   release_date: "Datum",
                                   genre_ids: []),
-                movieAdditional: MovieAdditionalModel(id: 1,
+                movieAdditional: MovieWrapperModel(id: 1,
                                                       bookmarked: false,
                                                       seen: false,
                                                       customDescription: "",

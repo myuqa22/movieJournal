@@ -20,7 +20,7 @@ class MovieAdditionalObject: Object {
 
 extension MovieAdditionalObject {
     
-    var movieAdditional: MovieAdditionalModel {
+    var movieAdditional: MovieWrapperModel {
         
         .init(id: id,
               bookmarked: bookmarked,

@@ -33,7 +33,7 @@ struct Movie: Reducer {
     struct State: Equatable, Hashable, Codable {
         
         var movie: MovieModel
-        var movieAdditional: MovieAdditionalModel?
+        var movieAdditional: MovieWrapperModel?
         var movieRating: MovieRating.State?
         var isSheetPresented = false
         var genres: [GenreModel] = []
@@ -46,7 +46,7 @@ struct Movie: Reducer {
         case loadOrCreateAdditional
         case watchlistButtonTapped
         case seenButtonTapped
-        case setupAdditional(MovieAdditionalModel)
+        case setupAdditional(MovieWrapperModel)
         case createAdditional
         case customRatingButtonTapped
         

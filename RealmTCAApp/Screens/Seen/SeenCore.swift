@@ -32,15 +32,15 @@ struct Seen: Reducer {
     struct State: Equatable, Hashable, Codable {
     
         var sortBy: SortType = .alphabeticallyAscending
-        var additional: IdentifiedArrayOf<MovieAdditionalModel> = []
-        var sortedAdditional: IdentifiedArrayOf<MovieAdditionalModel> = []
+        fileprivate var additional: IdentifiedArrayOf<MovieWrapperModel> = []
+        var sortedAdditional: IdentifiedArrayOf<MovieWrapperModel> = []
         var genres: IdentifiedArrayOf<GenreModel> = []
     }
     
     enum Action: Equatable, Sendable {
         
         case loadData
-        case updateMovieAdditional([MovieAdditionalModel])
+        case updateMovieAdditional([MovieWrapperModel])
         case loadMovies
         case updateMovies([MovieModel])
         case path(StackAction<Movie.State, Movie.Action>)

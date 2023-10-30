@@ -37,9 +37,9 @@ struct SeenView: View {
                             }, label: {
                                 if let firstGenreId = movie.genre_ids.first,
                                    let genre = viewStore.state.genres.first(where: { $0.id == firstGenreId }) {
-                                    MovieCellView(movie: movie, genre: genre)
+                                    MovieCellView(movieWrapper: additional, genre: genre)
                                 } else {
-                                    MovieCellView(movie: movie, genre: nil)
+                                    MovieCellView(movieWrapper: additional, genre: nil)
                                 }
                             })
                         }

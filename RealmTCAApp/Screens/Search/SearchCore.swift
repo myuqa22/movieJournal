@@ -34,9 +34,13 @@ struct Search: Reducer {
     
         @BindingState var searchInput: String = String()
         var searchResults = IdentifiedArrayOf<MovieModel>()
+        var additionals = Set<MovieWrapperModel>()
+        var mappedSearchResults = IdentifiedArrayOf<MovieWrapperModel>()
     }
     
     enum Action: BindableAction {
+        
+        case none
         
         case binding(BindingAction<State>)
         case updateSearchQuery(String)
@@ -46,6 +50,9 @@ struct Search: Reducer {
         case updateSearchMovies([MovieModel])
         
         case detailMovieButtonTapped(MovieModel)
+        
+        case loadAdditional
+        case updateAdditional([MovieWrapperModel])
     }
     
     @Dependency(\.moviesClient) var movieClient
@@ -75,10 +82,43 @@ struct Search: Reducer {
                 return .none
             case let .updateSearchMovies(searchResults):
                 state.searchResults = IdentifiedArray(uniqueElements: searchResults)
+                state.mappedSearchResults.removeAll()
+                for movie in searchResults {
+                    if var wrapper = state.additionals.first(where: { $0.id == movie.id }) {
+                        wrapper.movie = movie
+                        state.mappedSearchResults.append(wrapper)
+                    } else {
+                        let wrapper = MovieWrapperModel(id: movie.id,
+                                                        bookmarked: false,
+                                                        seen: false,
+                                                        customDescription: String(),
+                                                        customRating: .zero, movie: movie)
+                        state.mappedSearchResults.append(wrapper)
+                    }
+                }
                 return .none
-            case .detailMovieButtonTapped:
+            case let .detailMovieButtonTapped(movieModel):
+                return environment.realm.save(movieModel.movieObject).map { signal in
+                    switch signal {
+                    case .success:
+                        return .none
+                    case let .failure(appError):
+                        print(appError)
+                        return .none
+                    }
+                }
+            case .loadAdditional:
+                return environment.realm.fetch(MovieAdditionalObject.self)
+                    .map { results in
+                        return .updateAdditional(results.map({ $0.movieAdditional }))
+                    }
+            case let .updateAdditional(movieAdditional):
+                state.additionals = Set(movieAdditional)
+                return .none
+            case .none:
                 return .none
             }
         }
     }
+    
 }

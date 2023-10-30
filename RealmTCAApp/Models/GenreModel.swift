@@ -11,5 +11,4 @@ struct GenreModel: Equatable, Identifiable, Hashable, Codable {
     
     let id: Int
     let name: String
-    
 }

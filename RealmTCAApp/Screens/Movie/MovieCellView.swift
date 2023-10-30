@@ -9,21 +9,22 @@ import SwiftUI
 
 struct MovieCellView: View {
     
-    let movie: MovieModel
+    let movieWrapper: MovieWrapperModel
     let genre: GenreModel?
     
     let cellHeight = Constants.movieCellHeigth
     
     var body: some View {
+        
         HStack {
-            AsyncImage(url: movie.imageUrl) { image in
+            AsyncImage(url: movieWrapper.movie?.imageUrl) { image in
                 image.image?
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }
             .frame(height: cellHeight)
             VStack {
-                Text(movie.title)
+                Text(movieWrapper.movie?.title ?? String())
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
@@ -34,7 +35,7 @@ struct MovieCellView: View {
                         Text(genreName)
                         Text("·")
                     }
-                    if let year = movie.year {
+                    if let year = movieWrapper.movie?.year {
                         Text(verbatim: "\(year)")
                     }
                     Spacer()
@@ -43,9 +44,16 @@ struct MovieCellView: View {
             }
             .frame(height: cellHeight)
             Spacer()
-            Text(String(format: "%.1f", movie.rating))
-                .font(.body)
-                .foregroundStyle(.white)
+            VStack {
+                Text(String(format: "%.1f", movieWrapper.movie?.rating ?? .zero))
+                    .font(.body)
+                    .foregroundStyle(.white)
+                Text("TMBA")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+            }
+           
         }
         .frame(maxWidth: .infinity)
         .foregroundStyle(.black)
@@ -55,16 +63,7 @@ struct MovieCellView: View {
 
 #Preview {
     
-    List(0 ..< 5) { item in
-        MovieCellView(
-            movie: MovieModel(id: 1,
-                              title: "title",
-                              image: "/7VM1XHU6T8a4EMJnorMwEOX51Bd.jpg",
-                              rating: 2.0,
-                              overview: "overview",
-                              release_date: "23-11-02",
-                              genre_ids: [1]),
-            genre: GenreModel(id: 1, name: "Genre"))
-    }
-    .listStyle(.plain)
+    MovieCellView(
+        movieWrapper: MovieWrapperModel.dummy,
+        genre: GenreModel(id: 1, name: "Genre"))
 }

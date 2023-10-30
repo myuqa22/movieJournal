@@ -33,16 +33,15 @@ struct Watchlist: Reducer {
     struct State: Equatable, Hashable, Codable {
 
         var sortBy: SortType = .alphabeticallyAscending
-//        var movies: IdentifiedArrayOf<MovieModel> = []
-        var additional: IdentifiedArrayOf<MovieAdditionalModel> = []
-        var sortedAdditional: IdentifiedArrayOf<MovieAdditionalModel> = []
+        fileprivate var additional: IdentifiedArrayOf<MovieWrapperModel> = []
+        var sortedAdditional: IdentifiedArrayOf<MovieWrapperModel> = []
         var genres: IdentifiedArrayOf<GenreModel> = []
     }
     
     enum Action: Equatable, Sendable {
         
         case loadAdditional
-        case updateAdditional([MovieAdditionalModel])
+        case updateAdditional([MovieWrapperModel])
         case loadMovies
         case updateMovies([MovieModel])
         case path(StackAction<Movie.State, Movie.Action>)
