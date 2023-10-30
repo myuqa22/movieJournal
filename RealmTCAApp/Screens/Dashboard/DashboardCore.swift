@@ -36,9 +36,14 @@ struct Dashboard: Reducer {
         var popularMovies: IdentifiedArrayOf<MovieModel> = []
         var topRatedMovies: IdentifiedArrayOf<MovieModel> = []
         var isLoading = false
+        
         var popularMoviesCarusel = MoviesCarusel.State(category: .popular)
         var topRatedMoviesCarusel = MoviesCarusel.State(category: .topRated)
         var nowPlayingMoviesCarusel = MoviesCarusel.State(category: .nowPlaying)
+        var horrorMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 27, name: "Horor")))
+        var loveMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 10749, name: "Liebensfilm")))
+        var animationMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 16, name: "Animation")))
+        var documentationMoviesCarusel = MoviesCarusel.State(category: .genre(GenreModel(id: 99, name: "Dokumentation")))
     }
     
     enum Action {
@@ -55,6 +60,10 @@ struct Dashboard: Reducer {
         case popularMoviesCarusel(MoviesCarusel.Action)
         case topRatedMoviesCarusel(MoviesCarusel.Action)
         case nowPlayingMoviesCarusel(MoviesCarusel.Action)
+        case horrorMoviesCarusel(MoviesCarusel.Action)
+        case loveMoviesCarusel(MoviesCarusel.Action)
+        case animationMoviesCarusel(MoviesCarusel.Action)
+        case documentationMoviesCarusel(MoviesCarusel.Action)
         
         case fetchGenreMovies
         case genreMoviesReponse(TaskResult<GenresDto>)
@@ -76,26 +85,32 @@ struct Dashboard: Reducer {
             MoviesCarusel()
         }
         
+        Scope(state: \.horrorMoviesCarusel, action: /Action.horrorMoviesCarusel) {
+            MoviesCarusel()
+        }
+        
+        Scope(state: \.loveMoviesCarusel, action: /Action.loveMoviesCarusel) {
+            MoviesCarusel()
+        }
+        
+        Scope(state: \.animationMoviesCarusel, action: /Action.animationMoviesCarusel) {
+            MoviesCarusel()
+        }
+        
+        Scope(state: \.documentationMoviesCarusel, action: /Action.documentationMoviesCarusel) {
+            MoviesCarusel()
+        }
+        
         Reduce { state, action in
             
             switch action {
-            case let .popularMoviesCarusel(movieCaruselAction):
-                switch movieCaruselAction {
-                case let .gotToMovie(movieModel):
-                    state.path.append(.movie(.init(movie: movieModel)))
-                    return .none
-                default:
-                    return .none
-                }
-            case let .topRatedMoviesCarusel(movieCaruselAction):
-                switch movieCaruselAction {
-                case let .gotToMovie(movieModel):
-                    state.path.append(.movie(.init(movie: movieModel)))
-                    return .none
-                default:
-                    return .none
-                }
-            case let .nowPlayingMoviesCarusel(movieCaruselAction):
+            case let .popularMoviesCarusel(movieCaruselAction),
+                let .topRatedMoviesCarusel(movieCaruselAction),
+                let .nowPlayingMoviesCarusel(movieCaruselAction),
+                let .horrorMoviesCarusel(movieCaruselAction),
+                let .loveMoviesCarusel(movieCaruselAction),
+                let .animationMoviesCarusel(movieCaruselAction),
+                let .documentationMoviesCarusel(movieCaruselAction):
                 switch movieCaruselAction {
                 case let .gotToMovie(movieModel):
                     state.path.append(.movie(.init(movie: movieModel)))

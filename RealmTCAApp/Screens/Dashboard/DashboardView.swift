@@ -38,6 +38,26 @@ struct DashboardView: View {
                                                                           action: { childAction in
                                         .nowPlayingMoviesCarusel(childAction)
                                 }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.animationMoviesCarusel,
+                                                                          action: { childAction in
+                                        .animationMoviesCarusel(childAction)
+                                }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.documentationMoviesCarusel,
+                                                                          action: { childAction in
+                                        .documentationMoviesCarusel(childAction)
+                                }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.loveMoviesCarusel,
+                                                                          action: { childAction in
+                                        .loveMoviesCarusel(childAction)
+                                }))
+                                
+                                MoviesCaruselView(store: self.store.scope(state: \.horrorMoviesCarusel,
+                                                                          action: { childAction in
+                                        .horrorMoviesCarusel(childAction)
+                                }))
                             }
                             
                             Spacer()

@@ -16,7 +16,7 @@ struct MoviesClient {
     var nowPlayingMovies: @Sendable () async throws -> MoviesDto
     var genreMovies: @Sendable () async throws -> GenresDto
     var searchMovies: @Sendable (_ keyword: String) async throws -> MoviesDto
-    
+    var discoverMoviesByGenre : @Sendable (_ genre: String) async throws -> MoviesDto
 }
 
 extension DependencyValues {
@@ -100,6 +100,19 @@ extension MoviesClient: DependencyKey {
             let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
             
             return decoded
+        }, discoverMoviesByGenre: { genre in
+            try await Task.sleep(for: .seconds(0.5))
+            
+            var url = URL(string: "https://api.themoviedb.org/3/discover/movie?language=de-GER&include_adult=true&with_genres=\(genre)")!
+            
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
+            
+            let (data, _) = try await URLSession.shared
+                .data(for: request)
+            let decoded = try JSONDecoder().decode(MoviesDto.self, from: data)
+            
+            return decoded
         })
 
     /// This is the "unimplemented" fact dependency that is useful to plug into tests that you want
@@ -110,7 +123,8 @@ extension MoviesClient: DependencyKey {
         topRatedMovies: unimplemented("\(Self.self).topRatedMovies"),
         nowPlayingMovies: unimplemented("\(Self.self).nowPlayingMovies"),
         genreMovies: unimplemented("\(Self.self).genreMovies"),
-        searchMovies: unimplemented("\(Self.self).searchMovies")
+        searchMovies: unimplemented("\(Self.self).searchMovies"),
+        discoverMoviesByGenre: unimplemented("\(Self.self).discoverMoviesByGenre")
     )
     
 }

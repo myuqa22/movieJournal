@@ -74,6 +74,10 @@ struct MoviesCarusel: Reducer {
                         await send(.moviesResponse(.init {
                             try await self.movieClient.nowPlayingMovies()
                         }))
+                    case .genre(let genreModel):
+                        await send(.moviesResponse(.init {
+                            try await self.movieClient.discoverMoviesByGenre("\(genreModel.id)")
+                        }))
                     }
                 }
             case let .moviesResponse(.success(dto)):
@@ -81,9 +85,9 @@ struct MoviesCarusel: Reducer {
                     .map { $0.movieObject }
                     .map {
                         if !$0.categories
-                            .contains(where: { $0.category == MovieSourceCategoryType.topRated.rawValue }) {
+                            .contains(where: { $0.category == MovieSourceCategoryType.topRated.title }) {
                             let category = MovieSourceCategory()
-                            category.category = state.category.rawValue
+                            category.category = state.category.title
                             $0.categories.append(category)
                         }
                         return $0
@@ -106,7 +110,7 @@ struct MoviesCarusel: Reducer {
                     .map { [state = state] results in
                         let movies = Array(results.filter { movie in
                             movie.categories.contains { category in
-                                return category.category == state.category.rawValue
+                                return category.category == state.category.title
                             }}.map { $0.movie })
                         return .updateMovie(movies)
                     }

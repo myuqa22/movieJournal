@@ -7,11 +7,12 @@
 
 import Foundation
 
-enum MovieSourceCategoryType: String, Codable, Hashable {
+enum MovieSourceCategoryType: Codable, Hashable {
     
     case popular
     case topRated
     case nowPlaying
+    case genre(GenreModel)
     
     var title: String {
         
@@ -22,6 +23,8 @@ enum MovieSourceCategoryType: String, Codable, Hashable {
             return "Top Filme"
         case .nowPlaying:
             return "Neuerscheinungen"
+        case let .genre(genreModel):
+            return genreModel.name
         }
     }
     
