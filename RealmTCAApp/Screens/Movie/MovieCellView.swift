@@ -50,6 +50,7 @@ struct MovieCellView: View {
                         .overlay {
                             Text(String(format: "%.1f", movieWrapper.customRating))
                                 .fontWeight(.bold)
+                                .fixedSize(horizontal: true, vertical: false)
                                 .padding()
                                 .background(Circle().foregroundColor(.black))
                                 .foregroundColor(.white)
@@ -58,6 +59,7 @@ struct MovieCellView: View {
                     VStack {
                         Text(String(format: "%.1f", movieWrapper.movie?.rating ?? .zero))
                             .font(.body)
+                            .fixedSize(horizontal: true, vertical: false)
                             .foregroundStyle(.white)
                         Text("TMBA")
                             .font(.caption)

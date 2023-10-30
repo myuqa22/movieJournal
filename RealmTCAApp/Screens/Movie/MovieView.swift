@@ -51,7 +51,6 @@ struct MovieView: View {
                     Spacer()
                 }
                 .padding(.horizontal)
-                .toolbarTitleDisplayMode(.inline)
                 .onAppear {
                     viewStore.send(.loadGenres)
                     viewStore.send(.loadOrCreateAdditional)
