@@ -45,15 +45,30 @@ struct MovieCellView: View {
             .frame(height: cellHeight)
             Spacer()
             VStack {
-                Text(String(format: "%.1f", movieWrapper.movie?.rating ?? .zero))
-                    .font(.body)
-                    .foregroundStyle(.white)
-                Text("TMBA")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
+                if movieWrapper.customRating > .zero {
+                    CircularProgressView(progress: movieWrapper.customRating, maxProgress: Constants.maxRating)
+                        .overlay {
+                            Text(String(format: "%.1f", movieWrapper.customRating))
+                                .fontWeight(.bold)
+                                .padding()
+                                .background(Circle().foregroundColor(.black))
+                                .foregroundColor(.white)
+                        }
+                } else {
+                    VStack {
+                        Text(String(format: "%.1f", movieWrapper.movie?.rating ?? .zero))
+                            .font(.body)
+                            .foregroundStyle(.white)
+                        Text("TMBA")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                    }
+                }
             }
-           
+            .frame(width: 60, height: 60)
+            .padding(.vertical, 20)
+            .padding(.trailing, 10)
         }
         .frame(maxWidth: .infinity)
         .foregroundStyle(.black)
