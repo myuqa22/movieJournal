@@ -32,6 +32,7 @@ Verwendete REST API: [Movies REST API von TMDB](https://developer.themoviedb.org
 ## Features
 - Übersicht von gesehenen Filme
 - Watchlist
+- Filtern nach Bewertung, Name, Jahr (aufsteigend und absteigend)
 - Suche nach Filmen
 - Filmvorschläge nach Beliebtheit oder Genre
 - Filme in der Datenbank gespeichern
@@ -43,5 +44,7 @@ Verwendete REST API: [Movies REST API von TMDB](https://developer.themoviedb.org
 
 ## Kommende Features
 - Notizen zum Filmen abspeichern
+- Mehr Filme anzeigen bei den Filmvorschlägen mit Pagination
+- Pagination bei den Suchergebnissen
 - User friendly Error Handling
-
+- Mehr Informationen zum Film anzeigen wie Schauspieler, Dauer, usw.
