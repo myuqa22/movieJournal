@@ -1,31 +1,50 @@
 # Movie Journal App
 
-Move Journal App soll dem User die Möglichkeit geben gesehene Filme abzuspeichern oder Filme auf die Watchlist zu speichern. 
-Auf dem Dashboard werden aktuelle Filme angezeigt, die in der Detailansicht zur Watchlist hinzugefügt oder als gesehen markiert werden können.
+## Beschreibung
+Move Journal App soll dem User die Möglichkeit geben, gesehene Filme abzuspeichern oder Filme zur Watchlist hinzuzufügen. 
+Auf dem Dashboard werden Filme vorgeschlagen, wie nach Beliebtheit oder Genre. Hinzu ist es möglich über ein Keyword nach Filmen zu suchen.
+Alle Filme haben eine Detailansicht, indem diese zur Watchlist hinzugefügt, als gesehen markiert oder bewertet werden können. 
+
+## Zielsetzung
+Mit dieser App wollte ich die Architektur von TCA in Kombination mit der Realm Datenbank ausprobieren.
+
+## Herausforderungen
+Ich hatte Herausforderungen, Datenbankoperationen wie Speichern oder Erstellen als Effekt im Reducer einzubauen, weil diese keine Publisher zurückgeben, die als Effekt umgewandelt werden konnten. Es war notwendig, die Write Transaction in einem Future Combine Objekt zu wrappen, damit bei Erfolg oder Misserfolg ein AnyPublisher als Effect zurückgegeben werden kann. 
+Ein Effect erwartet darüber hinaus von einem AnyPublisher keinen Failure (publisher(AnyPublisher<Action, Never>)>), was das Error Handling erschwert, weil bei einer Datenbankoperation Fehler passieren können. Hierfür habe ich ein Signal Enum, welches als Action in einem Effect zurückgegeben werden kann. Das Signal Enum hat dann wie ein Result die Cases success und failure. Über diese Enum kann nun das Error Handling passieren. Ob diese Lösung optimal ist, muss noch evaluiert werden, weil es keine schöne Lösung darstellt. 
+
+## Vorraussetzungen
+
+- Xcode 15
+- iOS 16.0
+- API Key von TMDB
 Verwendete REST API: [Movies REST API von TMDB](https://developer.themoviedb.org/reference/intro/getting-started)
 
-<img src="https://github.com/myuqa22/movieJournal/assets/52576264/3350a996-8ab2-41df-90d3-40c66dbb7218" height="500">
-<img src="https://github.com/myuqa22/movieJournal/assets/52576264/45472eaf-9a05-4a6f-bcf0-d26d2e948847" height="500">
-<img src="https://github.com/myuqa22/movieJournal/assets/52576264/712d9fd4-218f-451b-8402-14fa3340d749" height="500">
-
-## Verwendete Technologien
+## Verwendete Technologien (Tech Stack)
 - SwiftUI
-- TCA
-- Realm
-- SPM
+- The Composable Architecture
+- Realm Database
+- Combine
+- Async/Await
+
+## Package Manager
+- Swift Package Manager (SPM)
 
 ## Features
-- Anbinding zur REST API
-- Filme werden in der Datenbank gespeichert
-- Aktuell beliebte Filme einsehen
-- Filme als gesehen markieren oder zur Watchlist hinzufügen
 - Übersicht von gesehenen Filme
-- Watchlist Übersicht
-## Kommende Features
-- User friendly Error Handling
+- Watchlist
+- Filtern nach Bewertung, Name, Jahr (aufsteigend und absteigend)
+- Suche nach Filmen
+- Filmvorschläge nach Beliebtheit oder Genre
+- Filme in der Datenbank gespeichern
+- Film Detailansicht (Cover, Bewertung, Beschreibung, Veröffentlichungsdatum)
+- Filme als gesehen markieren
+- Filme zur Watchlist hinzufügen
+- Filme bewerten auf einer Skala von 0-10
 - Unit Tests
-- Suchfunktion
-- Eigene Bewertung zu Filmen abspeichern
-- Notizen zu Filmen abspeichern
-- Mehr Informationen zu den Filmen anzeigen
 
+## Kommende Features
+- Notizen zum Filmen abspeichern
+- Mehr Filme anzeigen bei den Filmvorschlägen mit Pagination
+- Pagination bei den Suchergebnissen
+- User friendly Error Handling
+- Mehr Informationen zum Film anzeigen wie Schauspieler, Dauer, usw.
